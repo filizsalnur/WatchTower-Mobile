@@ -19,13 +19,8 @@ class logoutServices {
       body: jsonEncode({'jwt': jwt}), // Sending JWT in the request body
     );
     print(response.body);
-    bool result = await NfcService().resetReadOrder();
-    if (response.statusCode == 200) {
-      prefs.remove('jwt');
-      print('Logged out successfully');
-      await SessionService().endActiveSessionStatus();
-    } else {
-      print('Logout failed: ${response.body}');
-    }
+    prefs.remove('jwt');
+    print('Logged out successfully');
+    await SessionService().endActiveSessionStatus();
   }
 }
