@@ -37,7 +37,7 @@ class LoginUtils {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  String baseUrl = 'http://192.168.1.49:3000/';
+  String baseUrl = 'http://192.168.1.17:3000/';
   Future<void> setBaseUrl(String newBaseUrl) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('baseUrl', newBaseUrl);
@@ -81,17 +81,17 @@ class LoginUtils {
   }
 
   String hashPassword(String password) {
-     var bytes = utf8.encode(password);
+    var bytes = utf8.encode(password);
 
-     var hash = sha256.convert(bytes);
+    var hash = sha256.convert(bytes);
 
-     return hash.toString();
+    return hash.toString();
   }
 
   Future<void> saveCredentials(
       String mail, String password, bool rememberMe) async {
     final prefs = await SharedPreferences.getInstance();
-    if (rememberMe) { 
+    if (rememberMe) {
       prefs.setString('email', mail);
       prefs.setString('password', password);
       prefs.setBool('rememberMe', true);

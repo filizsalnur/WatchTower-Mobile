@@ -20,7 +20,6 @@ class NfcBlockWidget extends StatelessWidget {
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: Column(
         children: [
-        
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -34,7 +33,6 @@ class NfcBlockWidget extends StatelessWidget {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            
                             index != 0
                                 ? SizedBox(
                                     height: 30,
@@ -59,21 +57,17 @@ class NfcBlockWidget extends StatelessWidget {
                                   ),
                           ],
                         ),
-                       
-                
                         Row(
                           children: [
-
                             SizedBox(
-                              width: 10.0,
+                              width: 4.0,
                             ),
-                          
                             Padding(
-                              padding:  EdgeInsets.only(top: 25.0),
+                              padding: EdgeInsets.only(top: 25.0),
                               child: Text(
-                                'Tag Id: ',
+                                'Name: ',
                                 style: TextStyle(
-                                  fontSize: 28.0,
+                                  fontSize: 22.0,
                                 ),
                               ),
                             ),
@@ -84,7 +78,7 @@ class NfcBlockWidget extends StatelessWidget {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue,
-                                  fontSize: 28.0,
+                                  fontSize: 26.0,
                                 ),
                               ),
                             ),
@@ -97,7 +91,6 @@ class NfcBlockWidget extends StatelessWidget {
               ),
             ],
           ),
-       
         ],
       ),
     );

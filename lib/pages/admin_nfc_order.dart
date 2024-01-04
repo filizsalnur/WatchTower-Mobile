@@ -24,7 +24,8 @@ class NfcOrderPage extends StatefulWidget {
 }
 
 class NfcOrderPageState extends State<NfcOrderPage> {
-  WritingResult resultOfNfcWrite=WritingResult(NfcData(card_id: "", name: "", loc: Location(lat: "", long: "")), false);
+  WritingResult resultOfNfcWrite = WritingResult(
+      NfcData(card_id: "", name: "", loc: Location(lat: "", long: "")), false);
   var uuid = Uuid();
   List<Map<String, dynamic>> resultArray = [];
 
@@ -226,7 +227,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                                     Text(
                                       allowedOrderArray[i],
                                       style: TextStyle(
-                                        fontSize: 25.0,
+                                        fontSize: 22.0,
                                       ),
                                     ),
                                   ],
@@ -277,43 +278,37 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                           await AlertUtils()
                               .errorAlert('Tag names must be unique', context);
                         } else {
-                        
-                       
-                  
-                           if(Platform.isIOS){
-                            print("!!!!!!!!!!!!!!!!!!! IOS !!!!!!!!!!!!!!!!!!!!!!!!");
-                              var nfcData = await NfcService()
-                              .createNfcData(newTagName.tagName);
+                          if (Platform.isIOS) {
+                            print(
+                                "!!!!!!!!!!!!!!!!!!! IOS !!!!!!!!!!!!!!!!!!!!!!!!");
+                            var nfcData = await NfcService()
+                                .createNfcData(newTagName.tagName);
                             var resultOfNfcWrite =
-                              await NfcService().writeServiceForIOS(nfcData);
-                              setState(() {
-                                resultOfNfcWrite=resultOfNfcWrite;
-                              });
-                              print('resultOfNfcWrite: $resultOfNfcWrite');
-                              if (resultOfNfcWrite.status) {
+                                await NfcService().writeServiceForIOS(nfcData);
                             setState(() {
-                              allowedOrderArray.add(newTagName.tagName);
-                              addValuesToArray(
-                                  newTagName.tagName,
-                                  false,
-                                  index++,
-                                  resultOfNfcWrite.nfcData.card_id,
-                                  resultOfNfcWrite.nfcData.loc);
+                              resultOfNfcWrite = resultOfNfcWrite;
                             });
+                            print('resultOfNfcWrite: $resultOfNfcWrite');
+                            if (resultOfNfcWrite.status) {
+                              setState(() {
+                                allowedOrderArray.add(newTagName.tagName);
+                                addValuesToArray(
+                                    newTagName.tagName,
+                                    false,
+                                    index++,
+                                    resultOfNfcWrite.nfcData.card_id,
+                                    resultOfNfcWrite.nfcData.loc);
+                              });
+                            } else {
+                              await AlertUtils()
+                                  .errorAlert('Error Writing to Tag', context);
+                            }
                           } else {
-                            await AlertUtils()
-                                .errorAlert('Error Writing to Tag', context);
+                            print(
+                                "!!!!!!!!!!!!!!!!!!! Other !!!!!!!!!!!!!!!!!!!!!!!!");
+                            await _performNFCWrite(
+                                newTagName.tagName, newTagName);
                           }
-
-                          }else{
-                          print("!!!!!!!!!!!!!!!!!!! Other !!!!!!!!!!!!!!!!!!!!!!!!");
-                                await _performNFCWrite(
-                              newTagName.tagName, newTagName);
-                          }
-                       
-               
-                     
-                          
                         }
                       }
                     },
