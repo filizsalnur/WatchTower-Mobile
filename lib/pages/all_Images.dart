@@ -80,8 +80,12 @@ class _ImageListScreenState extends State<ImageListScreen> {
         title: const Text('Image'),
       ),
       body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Column(
-          children: <Widget>[
+          children: [
+            SizedBox(
+              height: 20,
+            ),
             ListView.builder(
               shrinkWrap: true,
               itemCount: imageNumbers,
@@ -90,9 +94,13 @@ class _ImageListScreenState extends State<ImageListScreen> {
                   fetchImage(index);
                 }
                 return imageDataList.length > index
-                    ? Image.memory(
-                        Uint8List.fromList(imageDataList[index]),
-                        fit: BoxFit.cover,
+                    ? Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Image.memory(
+                          Uint8List.fromList(imageDataList[index]),
+                          fit: BoxFit.fill,
+                          height: 200,
+                        ),
                       )
                     : const CircularProgressIndicator();
               },
