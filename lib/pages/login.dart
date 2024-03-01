@@ -210,8 +210,7 @@ class LoginPageState extends State<LoginPage> {
                 children: [
                   TextButton(
                     style: TextButton.styleFrom(
-                      primary: Theme.of(context).colorScheme.secondary,
-                      textStyle: TextStyle(
+                      foregroundColor: Theme.of(context).colorScheme.secondary, textStyle: TextStyle(
                         fontSize: 17,
                         color: Theme.of(context).colorScheme.secondary,
                       ),
