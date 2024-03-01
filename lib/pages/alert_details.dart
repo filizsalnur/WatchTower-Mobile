@@ -7,6 +7,7 @@ import 'package:watch_tower_flutter/pages/home.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../utils/login_utils.dart';
 import '../utils/alarm_utils.dart';
+import "./picture_take.dart";
 
 const List<String> list = <String>[
   'select_an_alert_type',
@@ -113,7 +114,9 @@ class _AlertDetailsState extends State<AlertDetails> {
               Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Content:",
-                      style: TextStyle(fontSize: 20,))),
+                      style: TextStyle(
+                        fontSize: 20,
+                      ))),
               SizedBox(height: 10),
               TextField(
                 controller: textFieldController,
@@ -124,12 +127,11 @@ class _AlertDetailsState extends State<AlertDetails> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.blue,width: 3),
+                    borderSide: BorderSide(color: Colors.blue, width: 3),
                   ),
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
                 ),
-              
               ),
               SizedBox(height: 30),
               ElevatedButton(
@@ -190,6 +192,16 @@ class _AlertDetailsState extends State<AlertDetails> {
                   ),
                 ),
               ),
+              SizedBox(height: 20),
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ImagePickerScreen()),
+                    );
+                  },
+                  icon: Icon(Icons.camera_alt_outlined)),
             ],
           ),
         ),
