@@ -60,6 +60,8 @@ dependencies:
   provider: ^6.1.1
   uuid: ^3.0.0
   fluttertoast: ^8.2.4
+  image_picker: ^1.0.7
+  permission_handler: ^11.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
