@@ -74,6 +74,9 @@ PODS:
     - Toast
   - geolocator_apple (1.2.0):
     - Flutter
+  - google_maps_flutter_ios (0.0.1):
+    - Flutter
+    - GoogleMaps (< 9.0)
   - GoogleAppMeasurement (10.18.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.18.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
@@ -98,6 +101,11 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleMaps (8.4.0):
+    - GoogleMaps/Maps (= 8.4.0)
+  - GoogleMaps/Base (8.4.0)
+  - GoogleMaps/Maps (8.4.0):
+    - GoogleMaps/Base
   - GoogleUtilities/AppDelegateSwizzler (7.13.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -162,6 +170,7 @@ DEPENDENCIES:
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
+  - google_maps_flutter_ios (from `.symlinks/plugins/google_maps_flutter_ios/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - nfc_manager (from `.symlinks/plugins/nfc_manager/ios`)
@@ -180,6 +189,7 @@ SPEC REPOS:
     - FirebaseMessaging
     - GoogleAppMeasurement
     - GoogleDataTransport
+    - GoogleMaps
     - GoogleUtilities
     - nanopb
     - PromisesObjC
@@ -208,6 +218,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   geolocator_apple:
     :path: ".symlinks/plugins/geolocator_apple/ios"
+  google_maps_flutter_ios:
+    :path: ".symlinks/plugins/google_maps_flutter_ios/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   location:
@@ -241,9 +253,11 @@ SPEC CHECKSUMS:
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
+  google_maps_flutter_ios: d1318b4ff711612cab16862d7a87e31a7403d458
   GoogleAppMeasurement: 70ce9aa438cff1cfb31ea3e660bcc67734cb716e
-  GoogleDataTransport: 57c22343ab29bc686febbf7cbb13bad167c2d8fe
-  GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
+  GoogleDataTransport: bed3a36c04c8552479fbb9b76326e0fc69bddcb2
+  GoogleMaps: 8939898920281c649150e0af74aa291c60f2e77d
+  GoogleUtilities: d053d902a8edaa9904e1bd00c37535385b8ed152
   image_picker_ios: 99dfe1854b4fa34d0364e74a78448a0151025425
   location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5

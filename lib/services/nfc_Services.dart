@@ -89,8 +89,9 @@ class NfcService {
   }
 
   Future<ApiResponse> getOrderArray() async {
-    if (await HttpServices().verifyToken()) {
+  
       try {
+          if (await HttpServices().verifyToken()) {
         print(
             '====================================Order which the system expects==================================== ');
         final response = await http.get(
@@ -104,14 +105,15 @@ class NfcService {
         print('Response Body: $responseBody');
 
         return ApiResponse(statusCode, responseBody);
+         } else {
+      print('JWT is not valid');
+      return ApiResponse(-1, "Error: JWT is not valid");
+    }
       } catch (e) {
         print("Error in fetching ORDER : $e");
         return ApiResponse(-1, "Error: $e");
       }
-    } else {
-      print('JWT is not valid');
-      return ApiResponse(-1, "Error: JWT is not valid");
-    }
+   
   }
 
   static ValueNotifier<dynamic> result = ValueNotifier(null);
