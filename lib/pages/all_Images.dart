@@ -77,36 +77,27 @@ class _ImageListScreenState extends State<ImageListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Image'),
+        title: Text('Image List'),
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: imageNumbers,
-              itemBuilder: (BuildContext context, int index) {
-                if (imageDataList.length <= index) {
-                  fetchImage(index);
-                }
-                return imageDataList.length > index
-                    ? Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Image.memory(
-                          Uint8List.fromList(imageDataList[index]),
-                          fit: BoxFit.fill,
-                          height: 200,
-                        ),
-                      )
-                    : const CircularProgressIndicator();
-              },
-            ),
-          ],
-        ),
+      body: ListView.builder(
+        itemCount: imageNumbers,
+        itemBuilder: (BuildContext context, int index) {
+          if (imageDataList.length <= index) {
+            fetchImage(index);
+          }
+          return imageDataList.length > index
+              ? Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Image.memory(
+                    Uint8List.fromList(imageDataList[index]),
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
+                )
+              : Center(
+                  child: CircularProgressIndicator(),
+                );
+        },
       ),
     );
   }
