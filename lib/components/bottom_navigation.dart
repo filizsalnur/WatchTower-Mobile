@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:watch_tower_flutter/pages/map-page.dart';
 import 'package:watch_tower_flutter/services/device_services.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import 'package:web_socket_channel/io.dart';
@@ -155,12 +156,15 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               icon: Icon(Icons.location_on_outlined),
               iconSize: 40,
               onPressed: () async {
-                LoginUtils().printAllSharedPreferences();
-                Navigator.push(
+                if (widget.pageName != "MapPage"){
+                  Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AlertScreen(data: "Warning Alert")),
+                      builder: (context) => MapPage() ),
                 );
+                }
+            
+                
               },
             ),
             IconButton(
