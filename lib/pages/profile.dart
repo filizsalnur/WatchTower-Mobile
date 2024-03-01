@@ -34,17 +34,17 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     });
     _getAuthLevel();
-  
-    
   }
+
   _getAuthLevel() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     authLevel = prefs.getString('authLevel')!;
 
-      setState(() {
-        authLevel = authLevel;
+    setState(() {
+      authLevel = authLevel;
     });
   }
+
   loadSavedCredentials() async {
     final credentials = await LoginUtils().loadSavedCredentials();
     String email = credentials.email;
@@ -154,55 +154,55 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               if (authLevel == 'user')
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextButton(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      fixedSize: Size.fromHeight(60),
                     ),
-                    fixedSize: Size.fromHeight(60),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(
-                            Icons.bookmark,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(
+                              Icons.bookmark,
+                              color: Colors.white,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              'My History',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HistoryPage()),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.arrow_forward_ios,
                             color: Colors.white,
                           ),
-                          SizedBox(width: 10),
-                          Text(
-                            'My History',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HistoryPage()),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.white,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextButton(
@@ -258,7 +258,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   await AlertUtils()
                       .successfulAlert('Logging  out...', context);
                   await logoutServices().logout();
-               
+
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => LoginPage()),
@@ -281,34 +281,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               ///////////////////////////////////////////////
-              SizedBox(height: 10),
-              TextButton(
-                onPressed: () async {
-                  await AlertUtils()
-                      .successfulAlert('Logging  out...', context);
-                  await logoutServices().logout2();
-                  
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                    (route) => false,
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.person,
-                      color: Colors.red,
-                    ),
-                    Text('Go to Login Page',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 20.0,
-                        )),
-                  ],
-                ),
-              )
+              // z
               ///////////////////////////////////////////////
             ],
           ),
