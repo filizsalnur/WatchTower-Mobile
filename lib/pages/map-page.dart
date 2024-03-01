@@ -10,6 +10,9 @@ import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import '../components/bottom_navigation.dart';
 import '../services/nfc_Services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+
 
 
 class MapPage extends StatefulWidget {
@@ -22,7 +25,13 @@ class MapPage extends StatefulWidget {
 class MapPageState extends State<MapPage> {
   bool isLightModeSelected = true;
   bool isLoading = true;
+  late GoogleMapController mapController;
 
+  final LatLng _center = const LatLng(39.7819185, 32.8199071);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
 
   @override
   void initState() {
@@ -30,6 +39,7 @@ class MapPageState extends State<MapPage> {
       setState(() {
         isLightModeSelected = value;
       });
+     
     });
 
     getOrderArray();
@@ -71,7 +81,9 @@ class MapPageState extends State<MapPage> {
 
       isLoading = false;
     });
+
 }
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,10 +115,14 @@ class MapPageState extends State<MapPage> {
         body: Stack(
           children: [
             if (!isLoading)
-            Container(
-              height: MediaQuery.of(context).size.height * 0.6, 
-              child: Text('Map'),
-            ),
+             GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: _center,
+                  zoom: 11.0,
+                ),
+              ),
+       
             if (isLoading)
               Container(
                 color: Colors.black.withOpacity(0.7),
@@ -126,3 +142,4 @@ class MapPageState extends State<MapPage> {
     );
   }
 }
+
