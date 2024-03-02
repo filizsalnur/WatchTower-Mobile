@@ -70,7 +70,11 @@ class _ImageListScreenState extends State<ImageListScreen> {
   @override
   void initState() {
     super.initState();
-    getImageNumbers();
+    getImageNumbers().then((_) {
+      for (int index = 0; index < imageNumbers; index++) {
+        fetchImage(index);
+      }
+    });
   }
 
   @override
@@ -80,18 +84,19 @@ class _ImageListScreenState extends State<ImageListScreen> {
         title: Text('Image List'),
       ),
       body: ListView.builder(
-        itemCount: imageNumbers,
+        itemCount: imageDataList.length,
+        // itemCount: imageNumbers,
         itemBuilder: (BuildContext context, int index) {
-          if (imageDataList.length <= index) {
-            fetchImage(index);
-          }
+          // if (imageDataList.length <= index) {
+          //   fetchImage(index);
+          // }
           return imageDataList.length > index
               ? Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Image.memory(
                     Uint8List.fromList(imageDataList[index]),
                     height: 200,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                   ),
                 )
               : Center(
