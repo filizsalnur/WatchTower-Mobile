@@ -137,6 +137,7 @@ class NfcService {
 
             payload_as_String = await UserInfoService()
                 .updateUserInfo(payload_as_String, sessionId);
+            payload_as_String = await NfcService().updateLocation(payload_as_String, sessionId);
 
             if (payload_as_String.length > 2) {
               int statusCode =
@@ -344,5 +345,40 @@ class NfcService {
       print(nfcData.toJson());
       return nfcData;
     }
+  }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   Future<String>  updateLocation(String jsonString,String sessionId) async {
+    try {
+      Map<String, dynamic> jsonData = jsonDecode(jsonString);
+
+      print("##################################################");
+      List<String> location = await DeviceService().getLocation();
+    print('======================LOCATION======================');
+    print(location);
+    if (location[0] == 'err') {
+      AlertUtils()
+          .getCustomToast("Please enable your location services.", Colors.red);
+      throw Exception('Error getting location');
+    } else {
+       Location loc = Location(lat: location[0], long: location[1]);
+      print('======================LOCATION======================');
+      print(location[0]);
+      print(location[1]);
+  
+      jsonData['loc'] = loc.toJson();
+          print('after adding location:');
+      print(jsonData);
+
+      String updatedJsonString = jsonEncode(jsonData);
+
+      return updatedJsonString;
+    }
+   
+  
+    } catch (e) {
+      print(e);
+      return 'error';
+    }
+    
   }
 }

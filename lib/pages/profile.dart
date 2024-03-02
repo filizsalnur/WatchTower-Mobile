@@ -281,7 +281,32 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               ///////////////////////////////////////////////
-              // z
+              TextButton(
+                onPressed: () async {
+           
+                  await logoutServices().logout2();
+
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    (route) => false,
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.login,
+                      color: Colors.green,
+                    ),
+                    Text('Go to Login Page',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 20.0,
+                        )),
+                  ],
+                ),
+              ),
               ///////////////////////////////////////////////
             ],
           ),
