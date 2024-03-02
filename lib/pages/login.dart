@@ -260,23 +260,21 @@ class LoginPageState extends State<LoginPage> {
                 height: 50,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed)) {
-                          return Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(0.5);
-                        }
-                        return null;
-                      },
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
+
+                    backgroundColor: MaterialStateProperty.all( Theme.of(context).colorScheme.primary,),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: const Text(
+                    padding:  EdgeInsets.all(8.0),
+                    child:  Text(
                       'LOGIN',
-                      style: TextStyle(),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color:  Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold,)
                     ),
                   ),
                   onPressed: () async {

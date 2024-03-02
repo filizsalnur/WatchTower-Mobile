@@ -22,9 +22,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-    
-      ),
+      appBar: AppBar(),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -64,15 +62,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
-                     
                       controller: _newpasswordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                        
-                          
-                  
                         ),
                         labelText: 'New Password',
                       ),
@@ -94,7 +88,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                   SizedBox(height: 20),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width -48,
+                    width: MediaQuery.of(context).size.width - 48,
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () async {
@@ -107,43 +101,56 @@ class _ChangePasswordState extends State<ChangePassword> {
                             _newpasswordController.text ==
                                 _confirmNewPasswordController.text) {
                           // ignore: use_build_context_synchronously
-                          ApiResponse passwordChangeResult = await HttpServices()
-                              .changePassword(
+                          ApiResponse passwordChangeResult =
+                              await HttpServices().changePassword(
                                   context,
                                   email,
                                   _oldPasswordController.text,
                                   _newpasswordController.text);
                           if (passwordChangeResult.statusCode <= 399) {
                             prefs.remove('jwt');
-                            prefs.setString("password", _newpasswordController.text);
+                            prefs.setString(
+                                "password", _newpasswordController.text);
                             await AlertUtils().successfulAlert(
                                 passwordChangeResult.response, context);
-                        
+
                             Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context) => LoginPage()),
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()),
                               (route) => false,
                             );
                           } else {
-                            await AlertUtils()
-                                .errorAlert(passwordChangeResult.response, context);
+                            await AlertUtils().errorAlert(
+                                passwordChangeResult.response, context);
                           }
-                        } else if (_confirmNewPasswordController.text.isNotEmpty &&
+                        } else if (_confirmNewPasswordController
+                                .text.isNotEmpty &&
                             _newpasswordController.text !=
                                 _confirmNewPasswordController.text) {
-                          AlertUtils().errorAlert("Passwords do not match", context);
+                          AlertUtils()
+                              .errorAlert("Passwords do not match", context);
                         } else if (email == '' ||
                             _newpasswordController.text.isEmpty ||
                             _confirmNewPasswordController.text.isEmpty) {
-                          AlertUtils().errorAlert("Please fill out all ", context);
+                          AlertUtils()
+                              .errorAlert("Please fill out all ", context);
                         }
                       },
                       child: Text('Confirm',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.background,
                           )),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.blue),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],

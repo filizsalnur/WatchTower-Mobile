@@ -134,6 +134,12 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
             ElevatedButton(
               onPressed: () {
                 if (widget.pageName != "AlertDetail") {
+                  if(isTorchPressed){
+                    setState(() {
+                      isTorchPressed = !isTorchPressed;
+                    });
+                    DeviceService().toggleTorch(isTorchPressed);
+                  }
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => AlertDetails()),
@@ -165,6 +171,12 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               onPressed: () {
                 if (widget.pageName != "HomePage" &&
                     widget.pageName != "AdminHomePage") {
+                      if(isTorchPressed){
+                    setState(() {
+                      isTorchPressed = !isTorchPressed;
+                    });
+                    DeviceService().toggleTorch(isTorchPressed);
+                  }
                   if (authLevel == "super_admin" || authLevel == "admin") {
                     Navigator.pushAndRemoveUntil(
                       context,
@@ -204,6 +216,12 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
              ElevatedButton(
               onPressed: () {
                 if (widget.pageName != "MapPage") {
+                   if(isTorchPressed){
+                    setState(() {
+                      isTorchPressed = !isTorchPressed;
+                    });
+                    DeviceService().toggleTorch(isTorchPressed);
+                  }
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => MapPage()),
@@ -234,6 +252,12 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
              ElevatedButton(
               onPressed: () {
                 if (widget.pageName != "ProfilePage") {
+                   if(isTorchPressed){
+                    setState(() {
+                      isTorchPressed = !isTorchPressed;
+                    });
+                    DeviceService().toggleTorch(isTorchPressed);
+                  }
                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => ProfilePage()),
