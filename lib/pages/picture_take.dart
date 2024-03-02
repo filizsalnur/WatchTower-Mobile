@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -8,6 +8,7 @@ import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../utils/login_utils.dart';
 import "./all_Images.dart";
 import 'package:http_parser/http_parser.dart'; // Add this import for MediaType
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class ImagePickerScreen extends StatefulWidget {
   const ImagePickerScreen({Key? key}) : super(key: key);
@@ -19,17 +20,40 @@ class ImagePickerScreen extends StatefulWidget {
 class _ImagePickerScreenState extends State<ImagePickerScreen> {
   XFile? image;
   String baseUrl = LoginUtils().baseUrl + 'picture/upload';
+  String url = LoginUtils().baseUrl + 'picture/allPictureUrls';
+
+  Future<List<String>> fetchImageUrls(String url) async {
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        final List<String> imageUrls = data.cast<String>();
+        return imageUrls;
+      } else {
+        throw Exception('Failed to load image URLs');
+      }
+    } catch (error) {
+      throw Exception('Failed to fetch image URLs: $error');
+    }
+  }
 
   Future<void> uploadImage(File imageFile) async {
     try {
-      final bytes = await imageFile.readAsBytes();
-      final base64Image = base64Encode(bytes);
+      // Compress the image file
+      Uint8List? compressedBytes = await FlutterImageCompress.compressWithFile(
+        imageFile.path,
+        quality: 50, // Adjust the quality as needed (0 - 100)
+      );
+
+      // Encode the compressed bytes to base64
+      String base64Image = base64Encode(compressedBytes as List<int>);
 
       final url = Uri.parse(baseUrl);
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'image': base64Image}),
+        body: jsonEncode({'image': base64Image, 'contentType': 'image/jpeg'}),
       );
       print(response.body);
 
@@ -50,44 +74,6 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
     }
   }
 
-  // Future<void> uploadImage(File imageFile) async {
-  //   try {
-  //     final url = Uri.parse(baseUrl);
-  //     final request = http.MultipartRequest('POST', url);
-
-  //     // Add the image file to the request
-  //     request.files.add(await http.MultipartFile.fromPath(
-  //       'image',
-  //       imageFile.path,
-  //       filename: 'image.jpg', // Adjust the filename as needed
-  //       contentType: MediaType(
-  //           'image', 'jpeg'), // Adjust content type based on your image type
-  //     ));
-
-  //     // Send the request
-  //     final response = await request.send();
-
-  //     if (response.statusCode == 200) {
-  //       // Image uploaded successfully
-  //       print('Image uploaded successfully');
-  //       // Extract the imageURL from the response
-  //       final responseData = await response.stream.bytesToString();
-  //       final imageUrl = jsonDecode(responseData)['imageUrl'];
-  //       print("imageUrl is: $imageUrl");
-  //       // Use imageUrl as needed (e.g., save it to display the image in your app)
-  //       await AlertUtils().successfulAlert('Image Uploaded', context);
-  //       Navigator.pop(context);
-  //     } else {
-  //       // Failed to upload image
-  //       print('Failed to upload image: ${response.reasonPhrase}');
-  //       // Handle failed upload response
-  //     }
-  //   } catch (error) {
-  //     print('Error uploading image: $error');
-  //     // Handle errors
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,17 +87,21 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    var imageUrls = await fetchImageUrls(url);
+                    print(imageUrls);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ImageListScreen()));
+                            builder: (context) => ImageDisplayScreen(
+                                  imageUrls: imageUrls,
+                                )));
                   },
                   child: Text('All images')),
               ElevatedButton.icon(
                 onPressed: () async {
                   final ImagePicker _picker = ImagePicker();
-                  final img =
+                  final XFile? img =
                       await _picker.pickImage(source: ImageSource.gallery);
                   setState(() {
                     image = img;
@@ -123,7 +113,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
               ElevatedButton.icon(
                 onPressed: () async {
                   final ImagePicker _picker = ImagePicker();
-                  final img =
+                  final XFile? img =
                       await _picker.pickImage(source: ImageSource.camera);
                   setState(() {
                     image = img;

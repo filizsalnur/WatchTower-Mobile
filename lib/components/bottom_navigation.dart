@@ -28,7 +28,7 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   bool isTorchPressed = false;
   String authLevel = '';
   String message = '';
-  static String UrlForWebSocket = 'ws://192.168.1.154:3000';
+  static String UrlForWebSocket = 'ws://192.168.1.193:3000';
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,15 +156,12 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               icon: Icon(Icons.location_on_outlined),
               iconSize: 40,
               onPressed: () async {
-                if (widget.pageName != "MapPage"){
+                if (widget.pageName != "MapPage") {
                   Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MapPage() ),
-                );
+                    context,
+                    MaterialPageRoute(builder: (context) => MapPage()),
+                  );
                 }
-            
-                
               },
             ),
             IconButton(
