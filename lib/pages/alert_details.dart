@@ -192,7 +192,7 @@ class _AlertDetailsState extends State<AlertDetails> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 220),
               IconButton(
                   onPressed: () {
                     Navigator.push(
@@ -201,7 +201,11 @@ class _AlertDetailsState extends State<AlertDetails> {
                           builder: (context) => ImagePickerScreen()),
                     );
                   },
-                  icon: Icon(Icons.camera_alt_outlined)),
+                  icon: Icon(
+                    Icons.camera_alt_outlined,
+                    size: 50,
+                    color: Colors.deepOrange,
+                  )),
             ],
           ),
         ),

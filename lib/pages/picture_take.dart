@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
@@ -14,13 +16,14 @@ class ImagePickerScreen extends StatefulWidget {
   const ImagePickerScreen({Key? key}) : super(key: key);
 
   @override
-  State<ImagePickerScreen> createState() => _ImagePickerScreenState();
+  State<ImagePickerScreen> createState() => ImagePickerScreenState();
 }
 
-class _ImagePickerScreenState extends State<ImagePickerScreen> {
+class ImagePickerScreenState extends State<ImagePickerScreen> {
   XFile? image;
   String baseUrl = LoginUtils().baseUrl + 'picture/upload';
   String url = LoginUtils().baseUrl + 'picture/allPictureUrls';
+  bool _isLoading = false;
 
   Future<List<String>> fetchImageUrls(String url) async {
     try {
@@ -29,6 +32,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         final List<String> imageUrls = data.cast<String>();
+        print(imageUrls);
         return imageUrls;
       } else {
         throw Exception('Failed to load image URLs');
@@ -43,7 +47,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
       // Compress the image file
       Uint8List? compressedBytes = await FlutterImageCompress.compressWithFile(
         imageFile.path,
-        quality: 50, // Adjust the quality as needed (0 - 100)
+        quality: 10, // Adjust the quality as needed (0 - 100)
       );
 
       // Encode the compressed bytes to base64
@@ -76,84 +80,133 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Add Image'),
-      ),
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text('Add Image'),
+          ),
+          body: Column(
             children: [
-              ElevatedButton(
-                  onPressed: () async {
-                    var imageUrls = await fetchImageUrls(url);
-                    print(imageUrls);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
+              Container(
+                color: Colors.blue,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        final ImagePicker _picker = ImagePicker();
+                        final XFile? img =
+                            await _picker.pickImage(source: ImageSource.camera);
+                        setState(() {
+                          image = img;
+                        });
+                      },
+                      label: const Text('Camera'),
+                      icon: const Icon(
+                        Icons.camera_alt_outlined,
+                        size: 30,
+                        color: (Colors.deepOrange),
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        var imageUrls = await fetchImageUrls(url);
+                        setState(() {
+                          _isLoading = false;
+                        });
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
                             builder: (context) => ImageDisplayScreen(
-                                  imageUrls: imageUrls,
-                                )));
-                  },
-                  child: Text('All images')),
-              ElevatedButton.icon(
-                onPressed: () async {
-                  final ImagePicker _picker = ImagePicker();
-                  final XFile? img =
-                      await _picker.pickImage(source: ImageSource.gallery);
-                  setState(() {
-                    image = img;
-                  });
-                },
-                label: const Text('Choose Image'),
-                icon: const Icon(Icons.image),
+                              imageUrls: imageUrls,
+                            ),
+                          ),
+                        );
+                      },
+                      label: Text('Gallery'),
+                      icon: const Icon(
+                        Icons.photo_album_outlined,
+                        size: 30,
+                        color: (Colors.deepOrange),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              ElevatedButton.icon(
-                onPressed: () async {
-                  final ImagePicker _picker = ImagePicker();
-                  final XFile? img =
-                      await _picker.pickImage(source: ImageSource.camera);
-                  setState(() {
-                    image = img;
-                  });
-                },
-                label: const Text('Take Photo'),
-                icon: const Icon(Icons.camera_alt_outlined),
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        final ImagePicker _picker = ImagePicker();
+                        final XFile? img = await _picker.pickImage(
+                            source: ImageSource.gallery);
+                        setState(() {
+                          image = img;
+                        });
+                      },
+                      label: const Text('Choose Image'),
+                      icon: const Icon(
+                        Icons.image,
+                        size: 30,
+                        color: (Colors.deepOrange),
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              if (image != null)
+                Expanded(
+                  child: Column(
+                    children: [
+                      Expanded(child: Image.file(File(image!.path))),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            image = null;
+                          });
+                        },
+                        label: const Text('Remove Image'),
+                        icon: const Icon(Icons.close),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          if (image != null) {
+                            uploadImage(File(image!.path));
+                          }
+                        },
+                        label: const Text('Upload Image'),
+                        icon: const Icon(Icons.cloud_upload),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                const SizedBox(),
             ],
           ),
-          if (image != null)
-            Expanded(
-              child: Column(
-                children: [
-                  Expanded(child: Image.file(File(image!.path))),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        image = null;
-                      });
-                    },
-                    label: const Text('Remove Image'),
-                    icon: const Icon(Icons.close),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      if (image != null) {
-                        uploadImage(File(image!.path));
-                      }
-                    },
-                    label: const Text('Upload Image'),
-                    icon: const Icon(Icons.cloud_upload),
-                  ),
-                ],
+        ),
+        if (_isLoading)
+          Container(
+            color: Colors.black.withOpacity(0.5),
+            child: Center(
+              child: SpinKitCubeGrid(
+                color: Colors.white,
+                size: 50.0,
               ),
-            )
-          else
-            const SizedBox(),
-        ],
-      ),
+            ),
+          ),
+      ],
     );
   }
 }
