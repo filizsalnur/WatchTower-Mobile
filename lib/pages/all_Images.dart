@@ -1,104 +1,149 @@
 import 'dart:convert';
-import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:watch_tower_flutter/utils/alarm_utils.dart';
-import '../utils/login_utils.dart';
+import 'package:watch_tower_flutter/pages/picture_take.dart';
+import 'package:watch_tower_flutter/utils/alert_utils.dart';
+import 'package:watch_tower_flutter/utils/login_utils.dart';
 
-class ImageListScreen extends StatefulWidget {
+class ImageDisplayScreen extends StatefulWidget {
+  final List<String> imageUrls;
+
+  const ImageDisplayScreen({Key? key, required this.imageUrls})
+      : super(key: key);
+
   @override
-  State<ImageListScreen> createState() => _ImageListScreenState();
+  _ImageDisplayScreenState createState() => _ImageDisplayScreenState();
 }
 
-class _ImageListScreenState extends State<ImageListScreen> {
-  List<List<int>> imageDataList = []; // List to store image data
+class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
+  int _currentIndex = 0;
+  bool _isFullScreen = false;
+  late String _selectedImageUrl;
 
-  String baseUrl = LoginUtils().baseUrl + 'picture/allPictures';
-
-  List<int> getImageData(Map<String, dynamic> imageData) {
-    if (imageData['type'] != 'Buffer') {
-      throw ArgumentError('Invalid image data format');
-    }
-
-    final List<dynamic> bufferData = imageData['data'];
-    return bufferData.map<int>((dynamic value) => value as int).toList();
+  void _showFullScreenImage(String imageUrl) {
+    setState(() {
+      _isFullScreen = true;
+      _selectedImageUrl = imageUrl;
+    });
   }
 
-  String newBaseUrl = LoginUtils().baseUrl;
-
-  int imageNumbers = 0;
-
-  Future<void> getImageNumbers() async {
-    final response =
-        await http.get(Uri.parse(newBaseUrl + 'picture/numberOfPictures'));
-    if (response.statusCode <= 399) {
-      int counter = int.parse(response.body);
-      setState(() {
-        imageNumbers = counter;
-      });
-    }
+  void _closeFullScreenImage() {
+    setState(() {
+      _isFullScreen = false;
+      _selectedImageUrl = '';
+    });
   }
 
-  Future<void> fetchImage(int i) async {
+  String url = LoginUtils().baseUrl + 'picture/deleteImage';
+  void deleteImage(String id) async {
     try {
+      id = id.split('/').last;
+      print("id  =>>>>>>>>>>>>$id");
+
+      String deleteUrl = url + '/$id';
+      print(deleteUrl);
+
       final response = await http.post(
-        Uri.parse(baseUrl),
+        Uri.parse(deleteUrl),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'index': i}),
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> imageDataListJson = jsonDecode(response.body);
-        if (imageDataListJson.isNotEmpty &&
-            imageDataListJson[0] is Map<String, dynamic>) {
-          final Map<String, dynamic> imageDataJson = imageDataListJson[0];
-          final List<int> imageDataBytes = getImageData(imageDataJson);
-          setState(() {
-            imageDataList.add(imageDataBytes);
-          });
-        } else {
-          print('Invalid image data format');
-        }
+        await AlertUtils().successfulAlert('Photo deleted ', context);
+        // Refresh the page to remove the deleted image from the list
+        setState(() {
+          widget.imageUrls.removeWhere((url) => url.contains(id));
+        });
+        Duration(seconds: 1);
+        _closeFullScreenImage();
       } else {
-        print('Failed to fetch image: ${response.statusCode}');
+        print('Failed to delete image: ${response.statusCode}');
+        await AlertUtils().errorAlert('Unable to delete photo', context);
+        _closeFullScreenImage();
       }
     } catch (e) {
-      print('Failed to fetch image: $e');
+      print('Error deleting image: $e');
+      await AlertUtils().errorAlert('Unable to delete photo', context);
+      _closeFullScreenImage();
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getImageNumbers();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Image List'),
+        title: Text('Image Display'),
       ),
-      body: ListView.builder(
-        itemCount: imageNumbers,
-        itemBuilder: (BuildContext context, int index) {
-          if (imageDataList.length <= index) {
-            fetchImage(index);
-          }
-          return imageDataList.length > index
-              ? Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Image.memory(
-                    Uint8List.fromList(imageDataList[index]),
-                    height: 200,
-                    fit: BoxFit.cover,
+      body: _isFullScreen
+          ? Column(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: _closeFullScreenImage,
+                    child: Container(
+                      color: Colors.black,
+                      child: Center(
+                        child: Image.network(_selectedImageUrl),
+                      ),
+                    ),
                   ),
-                )
-              : Center(
-                  child: CircularProgressIndicator(),
-                );
-        },
-      ),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    deleteImage(_selectedImageUrl);
+                  },
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.deepOrange,
+                    size: 30,
+                  ),
+                  label: Text(
+                    'Delete Image',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 30)
+              ],
+            )
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  for (int i = 0; i < widget.imageUrls.length; i += 2)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                _showFullScreenImage(widget.imageUrls[i]);
+                              },
+                              child: Image.network(
+                                widget.imageUrls[i],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          if (i + 1 < widget.imageUrls.length)
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  _showFullScreenImage(widget.imageUrls[i + 1]);
+                                },
+                                child: Image.network(
+                                  widget.imageUrls[i + 1],
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
     );
   }
 }

@@ -151,27 +151,23 @@ class _AlertDetailsState extends State<AlertDetails> {
                         await LoginUtils().getUserId());
 
                     await BottomAppBarWidgetState().sendMessage(data);
-                    int res =
-                        await WebSocketService().sendBroadcastMessageFirebase();
-                    if (res >= 399) {
-                      await AlertUtils().errorAlert('Failed to send', context);
-                    } else {
-                      await AlertUtils().successfulAlert('Success', context);
-                      String authLevel = await LoginUtils().getAuthLevel();
-                      if (authLevel == 'admin' || authLevel == 'super_admin') {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AdminHomePage()),
-                          (route) => false,
-                        );
-                      } else if (authLevel == 'user') {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
-                          (route) => false,
-                        );
-                      }
+                    // int res =await WebSocketService().`sendBroadcastMessageFirebase();
+
+                    await AlertUtils().successfulAlert('Success', context);
+                    String authLevel = await LoginUtils().getAuthLevel();
+                    if (authLevel == 'admin' || authLevel == 'super_admin') {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AdminHomePage()),
+                        (route) => false,
+                      );
+                    } else if (authLevel == 'user') {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                        (route) => false,
+                      );
                     }
                   }
                 },
@@ -192,7 +188,7 @@ class _AlertDetailsState extends State<AlertDetails> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 220),
               IconButton(
                   onPressed: () {
                     Navigator.push(
@@ -201,7 +197,11 @@ class _AlertDetailsState extends State<AlertDetails> {
                           builder: (context) => ImagePickerScreen()),
                     );
                   },
-                  icon: Icon(Icons.camera_alt_outlined)),
+                  icon: Icon(
+                    Icons.camera_alt_outlined,
+                    size: 50,
+                    color: Colors.deepOrange,
+                  )),
             ],
           ),
         ),
