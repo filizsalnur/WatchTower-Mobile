@@ -2,11 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/components/bottom_navigation.dart';
-import 'package:watch_tower_flutter/pages/admin_home.dart';
-import 'package:watch_tower_flutter/pages/home.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
-import '../utils/login_utils.dart';
-import '../utils/alarm_utils.dart';
 import "./picture_take.dart";
 
 const List<String> list = <String>[
@@ -35,20 +31,22 @@ class Data {
 }
 
 String capitalizeFirstLetter(String text) {
-  if (text == null || text.isEmpty) {
+  if (text.isEmpty) {
     return text;
   }
   return text[0].toUpperCase() + text.substring(1);
 }
 
 class AlertDetails extends StatefulWidget {
-  const AlertDetails({Key? key}) : super(key: key);
+  //const AlertDetails({Key? key}) : super(key: key);
   static const routeName = '/alert_details';
+
+  const AlertDetails({super.key});
   @override
-  State<AlertDetails> createState() => _AlertDetailsState();
+  State<AlertDetails> createState() => AlertDetailsState();
 }
 
-class _AlertDetailsState extends State<AlertDetails> {
+class AlertDetailsState extends State<AlertDetails> {
   final TextEditingController textFieldController1 = TextEditingController();
   final TextEditingController textFieldController = TextEditingController();
   String selectedType = '';
@@ -144,39 +142,26 @@ class _AlertDetailsState extends State<AlertDetails> {
                     await AlertUtils()
                         .errorAlert('Please enter a message', context);
                   } else {
-                    Data data = Data(
-                        "content",
-                        selectedType,
-                        textFieldController.text,
-                        await LoginUtils().getUserId());
-
-                    await BottomAppBarWidgetState().sendMessage(data);
-                    // int res =await WebSocketService().`sendBroadcastMessageFirebase();
-
-                    await AlertUtils().successfulAlert('Success', context);
-                    String authLevel = await LoginUtils().getAuthLevel();
-                    if (authLevel == 'admin' || authLevel == 'super_admin') {
-                      Navigator.pushAndRemoveUntil(
+                    // Data data = Data(
+                    //     "content",
+                    //     selectedType,
+                    //     textFieldController.text,
+                    //     await LoginUtils().getUserId());
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AdminHomePage()),
-                        (route) => false,
-                      );
-                    } else if (authLevel == 'user') {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                        (route) => false,
-                      );
-                    }
+                          builder: (context) => ImagePickerScreen(
+                              alertBody: selectedType,
+                              alertType: textFieldController.text),
+                        ));
                   }
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Send!',
+                  child: Text('Choose Image',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 30,
+                          fontSize: 25,
                           fontWeight: FontWeight.bold)),
                 ),
                 style: ButtonStyle(
@@ -188,20 +173,6 @@ class _AlertDetailsState extends State<AlertDetails> {
                   ),
                 ),
               ),
-              SizedBox(height: 220),
-              IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ImagePickerScreen()),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.camera_alt_outlined,
-                    size: 50,
-                    color: Colors.deepOrange,
-                  )),
             ],
           ),
         ),

@@ -8,11 +8,11 @@ class NfcBlockWidget extends StatelessWidget {
   final int index;
 
   const NfcBlockWidget({
-    Key? key,
+    super.key,
     required this.order,
     required this.isRead,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

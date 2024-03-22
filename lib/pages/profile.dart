@@ -16,10 +16,10 @@ class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  ProfilePageState createState() => ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class ProfilePageState extends State<ProfilePage> {
   String userName = "";
   String userEmail = "";
   bool light = true;
@@ -62,6 +62,12 @@ class _ProfilePageState extends State<ProfilePage> {
       userName = updatedEmail;
       userEmail = credentials.email;
     });
+  }
+
+  Future<String> getEmail() async {
+    final credentials = await LoginUtils().loadSavedCredentials();
+    String email = credentials.email;
+    return email;
   }
 
   @override
@@ -283,7 +289,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ///////////////////////////////////////////////
               TextButton(
                 onPressed: () async {
-           
                   await logoutServices().logout2();
 
                   Navigator.pushAndRemoveUntil(

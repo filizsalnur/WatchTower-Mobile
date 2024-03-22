@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:level_map/level_map.dart';
 
 class LevelMapPage extends StatefulWidget {
+  const LevelMapPage({super.key});
+
   @override
   LevelMapPageState createState() => LevelMapPageState();
 }
@@ -19,15 +21,15 @@ class LevelMapPageState extends State<LevelMapPage> {
             pathColor: Colors.black,
             currentLevelImage: ImageParams(
               path: "assets/images/current.png",
-              size: Size(150, 150),
+              size: const Size(150, 150),
             ),
             lockedLevelImage: ImageParams(
               path: "assets/images/locked.png",
-              size: Size(150, 150),
+              size: const Size(150, 150),
             ),
             completedLevelImage: ImageParams(
               path: "assets/images/check.png",
-              size: Size(150, 150),
+              size: const Size(150, 150),
             ),
             // startLevelImage: ImageParams(
             //   path: "assets/images/start.png",
@@ -35,7 +37,7 @@ class LevelMapPageState extends State<LevelMapPage> {
             // ),
             pathEndImage: ImageParams(
               path: "assets/images/finish.png",
-              size: Size(150, 150),
+              size: const Size(150, 150),
             ),
             bgImagesToBePaintedRandomly: [
               // ImageParams(
@@ -59,7 +61,7 @@ class LevelMapPageState extends State<LevelMapPage> {
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.black,
-          child: Icon(
+          child: const Icon(
             Icons.bolt,
             color: Colors.white,
           ),

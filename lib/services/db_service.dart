@@ -42,7 +42,7 @@ class DbServices {
       final jsonObject = jsonDecode(inputString);
       print('what is being sent to server: $jsonObject');
       final response = await http.post(
-        Uri.parse(BaseUrl + 'logs'),
+        Uri.parse('${BaseUrl}logs'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
@@ -67,13 +67,13 @@ class DbServices {
       } else {
         await AlertUtils()
             .successfulAlert('Please proceed to the next tag ', context);
-        print('inputString: ${inputString}');
+        print('inputString: $inputString');
         String jsonStringWithoutQuotes =
             inputString.substring(1, inputString.length - 1);
-        print('jsonStringWithoutQuotes: ${jsonStringWithoutQuotes}');
+        print('jsonStringWithoutQuotes: $jsonStringWithoutQuotes');
         Map<String, dynamic> newJsonObject =
             json.decode('{$jsonStringWithoutQuotes}');
-        print('newJsonObject: ${newJsonObject}');
+        print('newJsonObject: $newJsonObject');
         print('ID: ${newJsonObject['ID']}');
         await NfcHomePageState()
             .updateIsReadValue(newJsonObject['ID'].toString(), 'true');
@@ -86,7 +86,6 @@ class DbServices {
           'Unexpected error occured, please check connection ', context);
       Navigator.pop(context);
       return 500;
-      ;
     }
   }
 
@@ -94,7 +93,7 @@ class DbServices {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<int> updateArray(List<Map<String, dynamic>> array) async {
-    final url = BaseUrl + 'tagOrder/new';
+    final url = '${BaseUrl}tagOrder/new';
     print("//////////////////////////////////////////////");
     print('trying to set read order : $array');
 
@@ -124,7 +123,7 @@ class DbServices {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<dbResponse> getAllUsers() async {
-    final url = BaseUrl + 'get_all_users';
+    final url = '${BaseUrl}get_all_users';
     print("======================getAllUsers======================");
     try {
       final response = await http.get(
@@ -145,7 +144,7 @@ class DbServices {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<int> changeAuthLevel(String item) async {
-    final url = BaseUrl + 'change_auth_level';
+    final url = '${BaseUrl}change_auth_level';
     print('======================changeAuthLevel======================');
     try {
       print("item: $item");
@@ -183,7 +182,7 @@ class DbServices {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<ApiResponse> getUserHistory(String userId) async {
-    final url = BaseUrl + 'logs/user_history';
+    final url = '${BaseUrl}logs/user_history';
     print('======================getUserHistory======================');
     try {
       final response = await http.post(

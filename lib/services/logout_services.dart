@@ -1,6 +1,4 @@
 import 'package:http/http.dart' as http;
-import 'package:watch_tower_flutter/pages/nfcHome.dart';
-import 'package:watch_tower_flutter/services/nfc_Services.dart';
 import 'package:watch_tower_flutter/services/session_services.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +12,7 @@ class logoutServices {
     LoginUtils().printAllSharedPreferences();
     if (jwt != null) {
       final response = await http.post(
-        Uri.parse(baseUrl + 'logout'),
+        Uri.parse('${baseUrl}logout'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode({'jwt': jwt}),
       );
@@ -46,7 +44,7 @@ class logoutServices {
     LoginUtils().printAllSharedPreferences();
     if (jwt != null) {
       final response = await http.post(
-        Uri.parse(baseUrl + 'logout'),
+        Uri.parse('${baseUrl}logout'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode({'jwt': jwt}),
       );

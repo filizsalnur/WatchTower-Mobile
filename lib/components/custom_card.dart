@@ -12,13 +12,12 @@ class CustomCard extends StatelessWidget {
   final String navigatorName;
 
   const CustomCard(
-      {Key? key,
+      {super.key,
       required this.text,
       required this.title,
       required this.imgRoute,
       required this.customWidth,
-      required this.navigatorName})
-      : super(key: key);
+      required this.navigatorName});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class CustomCard extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => UsersListPage()));
             }
           },
-          child: Container(
+          child: SizedBox(
             height: 180,
             width: customWidth == 'full'
                 ? MediaQuery.of(context).size.width - 48

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:battery_info/battery_info_plugin.dart';
-import 'package:battery_info/model/iso_battery_info.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 
 import '../services/device_services.dart';

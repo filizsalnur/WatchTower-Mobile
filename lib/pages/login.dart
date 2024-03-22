@@ -1,11 +1,8 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:watch_tower_flutter/main.dart';
 import 'package:watch_tower_flutter/pages/admin_home.dart';
 import 'package:watch_tower_flutter/pages/home.dart';
-import 'package:watch_tower_flutter/themes.dart';
 import './signUp.dart';
 import '../services/login_Services.dart';
 import '../utils/login_utils.dart';
@@ -13,6 +10,8 @@ import '../utils/alert_utils.dart';
 
 class LoginPage extends StatefulWidget {
   static const String id = 'login_page';
+
+  const LoginPage({super.key});
   @override
   LoginPageState createState() => LoginPageState();
 }
@@ -255,7 +254,7 @@ class LoginPageState extends State<LoginPage> {
               height: 40.0,
             ),
             Center(
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width - 40,
                 height: 50,
                 child: ElevatedButton(

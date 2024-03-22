@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:watch_tower_flutter/components/bottom_navigation.dart';
 import 'package:web_socket_channel/io.dart';
@@ -59,7 +58,7 @@ class WebSocketService {
       print('what is being broadcasted from FireBase: ');
 
       final response = await http.get(
-        Uri.parse(BaseUrl + 'sendHelloMessage'),
+        Uri.parse('${BaseUrl}sendHelloMessage'),
       );
 
       if (response.statusCode >= 399) {

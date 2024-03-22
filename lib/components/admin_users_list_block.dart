@@ -2,19 +2,16 @@
 
 import 'package:flutter/material.dart';
 
-import '../pages/admin_user_list.dart';
-import '../services/payload_services.dart';
 
 class AdminUserListBlockWidget extends StatefulWidget {
   final String email;
   final String auth_level;
   final String id;
   const AdminUserListBlockWidget(
-      {Key? key,
+      {super.key,
       required this.email,
       required this.auth_level,
-      required this.id})
-      : super(key: key);
+      required this.id});
 
   @override
   AdminUserListBlockWidgetState createState() =>
@@ -26,21 +23,21 @@ class AdminUserListBlockWidgetState extends State<AdminUserListBlockWidget> {
 
   List<DropdownMenuItem<String>> authLevelList = [
     DropdownMenuItem(
-      child: Text('User'),
       value: 'user',
+      child: Text('User'),
     ),
     DropdownMenuItem(
-      child: Text('Admin'),
       value: 'admin',
+      child: Text('Admin'),
     ),
     DropdownMenuItem(
-      child: Text('Super Admin'),
       value: 'super_admin',
+      child: Text('Super Admin'),
     ),
   ];
   @override
-  checkUserInformations(String email, String auth_level, String id) {
-    if (email == '' || auth_level == '' || id == '') {
+  checkUserInformations(String email, String authLevel, String id) {
+    if (email == '' || authLevel == '' || id == '') {
       return false;
     }
     return true;
@@ -65,7 +62,7 @@ class AdminUserListBlockWidgetState extends State<AdminUserListBlockWidget> {
             (checkUserInformations(widget.email, widget.auth_level, widget.id))
                 ? Text(
                     widget.email.length > 23
-                        ? widget.email.substring(0, 20) + "..."
+                        ? "${widget.email.substring(0, 20)}..."
                         : widget.email,
                     style: TextStyle(fontSize: 20.0, color: Theme.of(context).colorScheme.background),
                   )

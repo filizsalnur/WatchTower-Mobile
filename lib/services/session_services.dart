@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:watch_tower_flutter/services/nfc_Services.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 
 import '../pages/home.dart';
@@ -44,7 +43,7 @@ class SessionService {
     if (await HttpServices().verifyToken()) {
       String userId = await LoginUtils().getUserId();
 
-      final url = LoginUtils().baseUrl + 'session/check';
+      final url = '${LoginUtils().baseUrl}session/check';
 
       print('======================Check Session======================');
       try {
@@ -75,7 +74,7 @@ class SessionService {
     if (await HttpServices().verifyToken()) {
       String userId = await LoginUtils().getUserId();
 
-      final url = LoginUtils().baseUrl + 'session/end';
+      final url = '${LoginUtils().baseUrl}session/end';
 
       print('======================Check Session======================');
       try {
@@ -105,7 +104,7 @@ class SessionService {
     if (await HttpServices().verifyToken()) {
       String userId = await LoginUtils().getUserId();
 
-      final url = LoginUtils().baseUrl + 'session/create';
+      final url = '${LoginUtils().baseUrl}session/create';
 
       print('======================Check Session======================');
       try {
@@ -151,7 +150,7 @@ class SessionService {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => NfcHomePage(isOldSessionOn: false)),
+              builder: (context) => const NfcHomePage(isOldSessionOn: false)),
         );
       } else {
         print('Error starting a new session');
@@ -175,7 +174,7 @@ class SessionService {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => NfcHomePage(isOldSessionOn: false)),
+            builder: (context) => const NfcHomePage(isOldSessionOn: false)),
       );
     } else {
       print('Error starting a new session');
@@ -194,7 +193,7 @@ class SessionService {
       AlertUtils().getCustomToast("Session successfuly saved!", Colors.green);
       await Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
       print('session stopped');
     } else {
@@ -207,7 +206,7 @@ class SessionService {
   Future<int> updateSessionOrder(String sessionId) async {
     if (await HttpServices().verifyToken()) {
       final url =
-          LoginUtils().baseUrl + 'session/updateExistingSessionCardOrder';
+          '${LoginUtils().baseUrl}session/updateExistingSessionCardOrder';
 
       print('======================UPDATE SESSION======================');
       try {
@@ -260,13 +259,13 @@ class SessionService {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => NfcHomePage(
+              builder: (context) => const NfcHomePage(
                     isOldSessionOn: true,
                   )),
         );
       } else {
         print('Tag order is not up to date');
-        await Duration(seconds: 2);
+        const Duration(seconds: 2);
         bool isConfirmed = await AlertUtils()
             .confirmSessionAlert("New Tag Order Detected    Update?", context);
         if (isConfirmed) {
@@ -275,7 +274,7 @@ class SessionService {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => NfcHomePage(
+                  builder: (context) => const NfcHomePage(
                         isOldSessionOn: true,
                       )),
             );
@@ -287,7 +286,7 @@ class SessionService {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => NfcHomePage(
+                builder: (context) => const NfcHomePage(
                       isOldSessionOn: true,
                     )),
           );

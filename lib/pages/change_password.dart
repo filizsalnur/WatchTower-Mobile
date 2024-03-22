@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/pages/login.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
-import 'package:watch_tower_flutter/utils/login_utils.dart';
 import "../components/bottom_navigation.dart";
 import '../services/login_Services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,9 +32,9 @@ class _ChangePasswordState extends State<ChangePassword> {
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  const SizedBox(height: 20),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Text(
                       'Change Password',
                       style: TextStyle(
@@ -44,7 +43,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
@@ -58,7 +57,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
@@ -72,7 +71,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
@@ -86,7 +85,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   SizedBox(
                     width: MediaQuery.of(context).size.width - 48,
                     height: 50,
@@ -117,7 +116,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LoginPage()),
+                                  builder: (context) => const LoginPage()),
                               (route) => false,
                             );
                           } else {
@@ -137,12 +136,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                               .errorAlert("Please fill out all ", context);
                         }
                       },
-                      child: Text('Confirm',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.background,
-                          )),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(Colors.blue),
                         shape: MaterialStateProperty.all(
@@ -151,6 +144,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                           ),
                         ),
                       ),
+                      child: Text('Confirm',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.background,
+                          )),
                     ),
                   ),
                 ],
@@ -159,7 +158,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBarWidget(
+      bottomNavigationBar: const BottomAppBarWidget(
         pageName: "ProfilePage",
       ),
     );

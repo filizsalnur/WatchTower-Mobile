@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:uuid/uuid.dart';
 
 class addNewTag {
   String tagName;
@@ -16,6 +15,12 @@ class addNewTagDialogObject {
   String tagName;
   bool isConfirmed;
   addNewTagDialogObject(this.tagName, this.isConfirmed);
+}
+
+class AlertInfo {
+  String message;
+  String type;
+  AlertInfo(this.type, this.message);
 }
 
 class AlertUtils {

@@ -1,23 +1,20 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:watch_tower_flutter/pages/picture_take.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 
 class ImageDisplayScreen extends StatefulWidget {
   final List<String> imageUrls;
 
-  const ImageDisplayScreen({Key? key, required this.imageUrls})
-      : super(key: key);
+  const ImageDisplayScreen({super.key, required this.imageUrls});
 
   @override
   _ImageDisplayScreenState createState() => _ImageDisplayScreenState();
 }
 
 class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
-  int _currentIndex = 0;
+  final int _currentIndex = 0;
   bool _isFullScreen = false;
   late String _selectedImageUrl;
 
@@ -35,13 +32,13 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
     });
   }
 
-  String url = LoginUtils().baseUrl + 'picture/deleteImage';
+  String url = '${LoginUtils().baseUrl}picture/deleteImage';
   void deleteImage(String id) async {
     try {
       id = id.split('/').last;
       print("id  =>>>>>>>>>>>>$id");
 
-      String deleteUrl = url + '/$id';
+      String deleteUrl = '$url/$id';
       print(deleteUrl);
 
       final response = await http.post(
@@ -55,7 +52,7 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
         setState(() {
           widget.imageUrls.removeWhere((url) => url.contains(id));
         });
-        Duration(seconds: 1);
+        const Duration(seconds: 1);
         _closeFullScreenImage();
       } else {
         print('Failed to delete image: ${response.statusCode}');
@@ -73,7 +70,7 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Image Display'),
+        title: const Text('Image Display'),
       ),
       body: _isFullScreen
           ? Column(
@@ -93,17 +90,17 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
                   onPressed: () {
                     deleteImage(_selectedImageUrl);
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.delete,
                     color: Colors.deepOrange,
                     size: 30,
                   ),
-                  label: Text(
+                  label: const Text(
                     'Delete Image',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(height: 30)
+                const SizedBox(height: 30)
               ],
             )
           : SingleChildScrollView(
@@ -125,7 +122,7 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           if (i + 1 < widget.imageUrls.length)
                             Expanded(
                               child: GestureDetector(

@@ -13,7 +13,6 @@ import 'package:watch_tower_flutter/services/login_Services.dart';
 import '../services/db_service.dart';
 import '../utils/alert_utils.dart';
 import 'package:uuid/uuid.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class NfcOrderPage extends StatefulWidget {
@@ -111,13 +110,13 @@ class NfcOrderPageState extends State<NfcOrderPage> {
   }
 
   void addValuesToArray(
-      String name, bool order, int index, String card_id, Location loc) {
+      String name, bool order, int index, String cardId, Location loc) {
     setState(() {
       resultArray.add({
         'name': name,
         'isRead': order,
         'index': index,
-        'card_id': card_id,
+        'card_id': cardId,
         'loc': loc.toJson()
       });
     });

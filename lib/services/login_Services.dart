@@ -2,10 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watch_tower_flutter/pages/login.dart';
-import 'package:watch_tower_flutter/pages/nfcHome.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
-import 'nfc_Services.dart';
 import 'package:http/http.dart' as http;
 
 class ApiResponse {
@@ -28,7 +26,7 @@ class HttpServices {
       print('what is being sent to the server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse(BaseUrl + 'login'),
+        Uri.parse('${BaseUrl}login'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
@@ -83,7 +81,7 @@ class HttpServices {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwt = prefs.getString('jwt') ?? '';
     final response = await http.post(
-      Uri.parse(BaseUrl + 'jwt-verify'),
+      Uri.parse('${BaseUrl}jwt-verify'),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode({"jwt": jwt}),
     );
@@ -110,7 +108,7 @@ class HttpServices {
       print('what is being sent to server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse(BaseUrl + 'signup'),
+        Uri.parse('${BaseUrl}signup'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
@@ -140,7 +138,7 @@ class HttpServices {
         print('what is being sent to Password Update: $jsonObject');
 
         final response = await http.post(
-          Uri.parse(BaseUrl + 'password/update'),
+          Uri.parse('${BaseUrl}password/update'),
           headers: {'Content-Type': 'application/json; charset=UTF-8'},
           body: jsonEncode(jsonObject),
         );
@@ -160,7 +158,7 @@ class HttpServices {
       await AlertUtils()
           .errorAlert('Session  Timeout. Please login again', context);
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
+          context, MaterialPageRoute(builder: (context) => const LoginPage()));
       print('JWT is not valid');
       return ApiResponse(-1, "Error: JWT is not valid");
     }

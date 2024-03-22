@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:watch_tower_flutter/main.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
@@ -13,6 +12,10 @@ import '../components/bottom_navigation.dart';
 import './nfcHome.dart';
 import '../components/custom_card.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../pages/viewNotification.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -51,6 +54,15 @@ class _HomePageState extends State<HomePage> {
     _checkSessionStatus();
     _loadSavedCredentials();
     super.initState();
+    print(
+        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
+    print(
+        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
+    getAlertCount(context);
+    print(
+        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
+    print(
+        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
   }
 
   Future _checkSessionStatus() async {
@@ -252,7 +264,7 @@ class _HomePageState extends State<HomePage> {
                       //     );
                       //   }
                       // },
-                      child: Container(
+                      child: SizedBox(
                         height: 200,
                         width: MediaQuery.of(context).size.width - 48,
                         child: InkWell(
@@ -439,5 +451,106 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+  Future<void> getAlertCount(BuildContext context) async {
+    print(
+        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
+    print(
+        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
+    print(
+        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
+    try {
+      final response = await http.get(
+        Uri.parse('${LoginUtils().baseUrl}picture/alertNumber'),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+      );
+      if (response.statusCode < 399) {
+        // Parse the response body as JSON
+        final int res = json.decode(response.body) - 1;
+        print('Alert count: $res');
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        if (prefs.containsKey('alertCount')) {
+          int alertCount = int.parse(prefs.getString('alertCount')!);
+          int newAlerts = res - alertCount;
+          if (newAlerts > 0) {
+            ////// call the function to trigger the notification
+            getAlertByIndex(alertCount + 1, context);
+            int newAlertCount = alertCount + 1;
+            prefs.setString('alertCount', newAlertCount.toString());
+          } else {
+            print('No new alerts');
+          }
+        } else {
+          prefs.setString('alertCount', res.toString());
+        }
+      } else {
+        print('ERROR: ${response.body}');
+      }
+    } catch (e) {
+      print("Error in db_services: $e");
+    }
+
+    print(
+        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
+    print(
+        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
+    print(
+        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
+  }
+
+  Future<void> getAlertByIndex(
+    int index,
+    BuildContext context,
+  ) async {
+    try {
+      final response = await http.post(
+          Uri.parse('${LoginUtils().baseUrl}picture/showAlertByIndex'),
+          body: {
+            'index': index.toString(),
+          });
+
+      final decodedResponse = json.decode(response.body);
+      final imageUrl = decodedResponse['url'];
+      final imageId = decodedResponse['id'];
+      final email = decodedResponse['email'];
+      final alertType = decodedResponse['alertType'];
+      final alertBody = decodedResponse['alertBody'];
+      final alertDate = decodedResponse['createdAt'];
+      scaffoldMessengerKey.currentState!.showSnackBar(
+        SnackBar(
+          content: Text('New Alert Received'),
+          duration: const Duration(seconds: 5),
+          action: SnackBarAction(
+            label: 'View Alert',
+            textColor: Colors.white,
+            backgroundColor: Colors.purple,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ViewAlertPage(
+                            imageUrl: imageUrl,
+                            imageId: imageId,
+                            email: email,
+                            alertType: alertType,
+                            alertBody: alertBody,
+                            alertDate: alertDate,
+                          )));
+            },
+          ),
+        ),
+      );
+
+      print("========================================");
+      print(response.body);
+      print("========================================");
+    } catch (e) {
+      print("Error in db_services: $e");
+    }
   }
 }

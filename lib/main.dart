@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:watch_tower_flutter/firebase_options.dart';
-import 'package:watch_tower_flutter/pages/alert_screen.dart';
-import 'package:watch_tower_flutter/pages/nfcHome.dart';
 import 'package:watch_tower_flutter/themes.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import './pages/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import "./utils/firebase_utils.dart";
 
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 void main() async {
-   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -22,30 +23,33 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
-bool isLightMode = brightness == Brightness.light;
- LoginUtils().saveThemeMode(isLightMode);
+    var brightness =
+        SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    bool isLightMode = brightness == Brightness.light;
+    LoginUtils().saveThemeMode(isLightMode);
 
     return MaterialApp(
       title: 'Watch Tower',
-      home: LoginPage(),
-
+      home: const LoginPage(),
+      scaffoldMessengerKey: scaffoldMessengerKey,
       theme: Provider.of<ThemeProvider>(context).isLightModeSelected
           ? ThemeClass.lightTheme
           : ThemeClass.darkTheme,
-  
       debugShowCheckedModeBanner: false,
     );
   }
 }
+
 class ThemeProvider with ChangeNotifier {
   bool _isLightModeSelected = true;
 
@@ -56,12 +60,13 @@ class ThemeProvider with ChangeNotifier {
   }
 
   Future<void> _initThemeMode() async {
-    var brightness = SchedulerBinding.instance!.platformDispatcher.platformBrightness;
+    var brightness =
+        SchedulerBinding.instance.platformDispatcher.platformBrightness;
     _isLightModeSelected = brightness == Brightness.light;
     await LoginUtils().saveThemeMode(_isLightModeSelected);
     notifyListeners();
   }
-  
+
   Future<void> toggleThemeMode() async {
     _isLightModeSelected = !_isLightModeSelected;
     await LoginUtils().changeThemeMode();
@@ -69,6 +74,3 @@ class ThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 }
-
-
-

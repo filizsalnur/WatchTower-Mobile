@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 List<String> updatedAuthLevelList = [];
 List<String> _updatedAuthLevelList = [];
@@ -51,8 +50,8 @@ class PayloadServices {
   }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  void addToUpdatedAuthLevelList(String id, String auth_level) {
-    _updatedAuthLevelList.add('{"_id": "$id","auth_level": "$auth_level"}');
+  void addToUpdatedAuthLevelList(String id, String authLevel) {
+    _updatedAuthLevelList.add('{"_id": "$id","auth_level": "$authLevel"}');
   }
 
   List<String> getUpdatedAuthLevelList() {

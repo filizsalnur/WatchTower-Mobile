@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 import 'package:watch_tower_flutter/pages/login.dart';
 import 'package:watch_tower_flutter/services/device_services.dart';
 import 'package:watch_tower_flutter/services/payload_services.dart';
@@ -95,7 +94,7 @@ class NfcService {
         print(
             '====================================Order which the system expects==================================== ');
         final response = await http.get(
-          Uri.parse(BaseUrl + 'tagOrder/get'),
+          Uri.parse('${BaseUrl}tagOrder/get'),
         );
 
         final statusCode = response.statusCode;
@@ -130,18 +129,18 @@ class NfcService {
 
             List<int> intList = PayloadServices().convertStringToArray(
                 PayloadServices().getPayload(result.toString()));
-            String payload_as_String =
+            String payloadAsString =
                 PayloadServices().decodedResultPayload((intList));
 
-            result.value = payload_as_String;
+            result.value = payloadAsString;
 
-            payload_as_String = await UserInfoService()
-                .updateUserInfo(payload_as_String, sessionId);
-            payload_as_String = await NfcService().updateLocation(payload_as_String, sessionId);
+            payloadAsString = await UserInfoService()
+                .updateUserInfo(payloadAsString, sessionId);
+            payloadAsString = await NfcService().updateLocation(payloadAsString, sessionId);
 
-            if (payload_as_String.length > 2) {
+            if (payloadAsString.length > 2) {
               int statusCode =
-                  await DbServices().saveToDatabase(context, payload_as_String);
+                  await DbServices().saveToDatabase(context, payloadAsString);
               NfcManager.instance.stopSession();
               completer.complete(statusCode);
             }
@@ -163,7 +162,7 @@ class NfcService {
       await AlertUtils()
           .errorAlert('Session Timeout. Please login again', context);
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
+          context, MaterialPageRoute(builder: (context) => const LoginPage()));
       print('JWT is not valid');
       return -1;
     }
@@ -245,7 +244,7 @@ class NfcService {
           }
         });
         counter++;
-        await Future.delayed(Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 500));
 
         if (success == true || counter == 20) {
           print('Success achieved!');
@@ -326,7 +325,7 @@ class NfcService {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<NfcData> createNfcData(String name) async {
-    var uuid = Uuid();
+    var uuid = const Uuid();
     String uniqueId = uuid.v4();
     List<String> location = await DeviceService().getLocation();
     print('======================LOCATION======================');

@@ -11,6 +11,8 @@ import 'package:watch_tower_flutter/components/bottom_navigation.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 
 class HistoryPage extends StatefulWidget {
+  const HistoryPage({super.key});
+
   @override
   HistoryPageState createState() => HistoryPageState();
 }
@@ -37,18 +39,18 @@ class HistoryPageState extends State<HistoryPage> {
     ApiResponse response = await DbServices().getUserHistory(userId);
     if (response.statusCode > 400 && response.statusCode < 500) {
       AlertUtils().InfoAlert("Couldn't Find Any Record!", context);
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => ProfilePage()),
+        MaterialPageRoute(builder: (context) => const ProfilePage()),
         (route) => false,
       );
     } else if (response.statusCode >= 500) {
       AlertUtils().errorAlert("Check Connection", context);
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => ProfilePage()),
+        MaterialPageRoute(builder: (context) => const ProfilePage()),
         (route) => false,
       );
     }
@@ -79,8 +81,8 @@ class HistoryPageState extends State<HistoryPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
+                    const Padding(
+                      padding: EdgeInsets.all(10.0),
                       child: Text(
                         "History",
                         style: TextStyle(
@@ -103,7 +105,7 @@ class HistoryPageState extends State<HistoryPage> {
             if (isLoading)
               Container(
                 color: Colors.black.withOpacity(0.7),
-                child: Center(
+                child: const Center(
                   child: SpinKitCubeGrid(
                     color: Colors.white,
                     size: 50.0,
@@ -112,7 +114,7 @@ class HistoryPageState extends State<HistoryPage> {
               ),
           ],
         ),
-        bottomNavigationBar: BottomAppBarWidget(
+        bottomNavigationBar: const BottomAppBarWidget(
           pageName: "HistoryPage",
         ),
       ),

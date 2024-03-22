@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class AlertScreen extends StatefulWidget {
   final String data;
-  const AlertScreen({Key? key, required this.data}) : super(key: key);
+  const AlertScreen({super.key, required this.data});
 
   @override
   State<AlertScreen> createState() => AlertScreenState();
@@ -32,7 +32,7 @@ class AlertScreenState extends State<AlertScreen> {
     String message = widget.data;
     bool isMute = false;
     double sliderValue = 100.0;
-    double _currentSliderValue = 100.0;
+    double currentSliderValue = 100.0;
 
     return Scaffold(
       appBar: AppBar(),
@@ -66,7 +66,7 @@ class AlertScreenState extends State<AlertScreen> {
                                 color: Colors.red),
                           ),
                           Text(
-                            "$message",
+                            message,
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.black,
@@ -84,7 +84,7 @@ class AlertScreenState extends State<AlertScreen> {
               SizedBox(
                 height: 20,
               ),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width - 40,
                 height: 50,
                 child: ElevatedButton(
@@ -113,7 +113,7 @@ class AlertScreenState extends State<AlertScreen> {
               SizedBox(
                 height: 20,
               ),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width - 40,
                 height: 50,
                 child: ElevatedButton(

@@ -95,8 +95,8 @@ class FirebaseUtils {
   Future getDeviceTokenIos() async {
     //request user permission for push notification
     FirebaseMessaging.instance.requestPermission();
-    FirebaseMessaging _firebaseMessage = FirebaseMessaging.instance;
-    String? deviceToken = await _firebaseMessage.getToken();
+    FirebaseMessaging firebaseMessage = FirebaseMessaging.instance;
+    String? deviceToken = await firebaseMessage.getToken();
     return (deviceToken == null) ? "" : deviceToken;
   }
 

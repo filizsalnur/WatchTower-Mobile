@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../pages/admin_user_list.dart';
-import '../pages/admin_home.dart';
 
 class HistoryCard extends StatelessWidget {
   final String date;
@@ -12,12 +10,11 @@ class HistoryCard extends StatelessWidget {
   final bool isItself;
 
   const HistoryCard(
-      {Key? key,
+      {super.key,
       required this.date,
       required this.batteryLevel,
       required this.name,
-      required this.isItself})
-      : super(key: key);
+      required this.isItself});
 
   String changeDateFormate() {
     DateTime dateTime = DateTime.parse(date).toLocal();
