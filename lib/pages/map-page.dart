@@ -12,9 +12,6 @@ import '../components/bottom_navigation.dart';
 import '../services/nfc_Services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-
-
-
 class MapPage extends StatefulWidget {
   const MapPage({Key? key});
 
@@ -26,6 +23,7 @@ class MapPageState extends State<MapPage> {
   bool isLightModeSelected = true;
   bool isLoading = true;
   late GoogleMapController mapController;
+  List<Map<String, dynamic>> orderArrayData = [];
 
   final LatLng _center = const LatLng(39.7819185, 32.8199071);
 
@@ -39,11 +37,10 @@ class MapPageState extends State<MapPage> {
       setState(() {
         isLightModeSelected = value;
       });
-     
     });
 
     getOrderArray();
- 
+
     super.initState();
   }
 
@@ -58,9 +55,9 @@ class MapPageState extends State<MapPage> {
     return dataList;
   }
 
-  Future getOrderArray() async {
-  ApiResponse orderArray = await NfcService().getOrderArray();
-  if (orderArray.statusCode > 400 && orderArray.statusCode < 500) {
+  Future<void> getOrderArray() async {
+    ApiResponse orderArray = await NfcService().getOrderArray();
+    if (orderArray.statusCode > 400 && orderArray.statusCode < 500) {
       AlertUtils().InfoAlert("Couldn't Find Any Record!", context);
       await Future.delayed(Duration(seconds: 2));
       Navigator.pushAndRemoveUntil(
@@ -76,27 +73,25 @@ class MapPageState extends State<MapPage> {
         MaterialPageRoute(builder: (context) => HomePage()),
         (route) => false,
       );
-    }else{
-      List<Map<String, dynamic>> orderArrayData = parseData(orderArray.response);
-      print("_=_=_=_=_=_=_=_=_=_=_ ORDER ARRAY LIST _=_=_=_=_=_=_=_=_=_=_=_=_=_=");
+    } else {
+      List<Map<String, dynamic>> orderArrayData2 =
+          parseData(orderArray.response);
+      print(
+          "_=_=_=_=_=_=_=_=_=_=_ ORDER ARRAY LIST _=_=_=_=_=_=_=_=_=_=_=_=_=_=");
       print(orderArrayData);
-      }
+      setState(() {
+        orderArrayData = orderArrayData2;
+      });
+    }
 
     setState(() {
-      
       isLoading = false;
     });
-
-}
-
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: Scaffold(
+    return Scaffold(
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(40.0),
             child: AppBar(
@@ -117,34 +112,44 @@ class MapPageState extends State<MapPage> {
                 ),
               ],
             )),
-        body: Stack(
-          children: [
-            if (!isLoading)
-             GoogleMap(
-                onMapCreated: _onMapCreated,
+        body: isLoading
+            ? Center(
+                child: SpinKitFadingCircle(
+                  color: Colors.blue, // Specify a color here
+                  size: 50.0,
+                ),
+              )
+            : GoogleMap(
                 initialCameraPosition: CameraPosition(
-                  target: _center,
-                  zoom: 11.0,
+                  target: _getLatLng(orderArrayData[0]),
+                  zoom: 15,
                 ),
+                onMapCreated: _onMapCreated,
+                markers: _createMarkers(),
               ),
-       
-            if (isLoading)
-              Container(
-                color: Colors.black.withOpacity(0.7),
-                child: Center(
-                  child: SpinKitCubeGrid(
-                    color: Colors.white,
-                    size: 50.0,
-                  ),
-                ),
-              ),
-          ],
-        ),
         bottomNavigationBar: BottomAppBarWidget(
           pageName: "MapPage",
-        ),
-      ),
-    );
+        ));
+  }
+
+  Set<Marker> _createMarkers() {
+    Set<Marker> markers = {};
+
+    for (var order in orderArrayData) {
+      Marker marker = Marker(
+        markerId: MarkerId(order['card_id']),
+        position: _getLatLng(order),
+        infoWindow: InfoWindow(title: order['name']),
+      );
+      markers.add(marker);
+    }
+
+    return markers;
+  }
+
+  LatLng _getLatLng(Map<String, dynamic> data) {
+    double lat = double.parse(data['loc']['lat']);
+    double long = double.parse(data['loc']['long']);
+    return LatLng(lat, long);
   }
 }
-
