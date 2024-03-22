@@ -7,6 +7,10 @@ import 'package:nfc_manager/nfc_manager.dart';
 import '../utils/login_utils.dart';
 
 class DeviceService {
+
+
+
+
   String BaseUrl = LoginUtils().baseUrl;
 
   static const platform = MethodChannel('battery');

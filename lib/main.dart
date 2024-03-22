@@ -18,7 +18,7 @@ void main() async {
   );
   await FirebaseUtils().initNotifications();
   await FirebaseMessaging.instance.subscribeToTopic('Broadcast_Alert');
- 
+
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
