@@ -76,9 +76,14 @@ class MapPageState extends State<MapPage> {
         MaterialPageRoute(builder: (context) => HomePage()),
         (route) => false,
       );
-    }
-    setState(() {
+    }else{
+      List<Map<String, dynamic>> orderArrayData = parseData(orderArray.response);
+      print("_=_=_=_=_=_=_=_=_=_=_ ORDER ARRAY LIST _=_=_=_=_=_=_=_=_=_=_=_=_=_=");
+      print(orderArrayData);
+      }
 
+    setState(() {
+      
       isLoading = false;
     });
 
