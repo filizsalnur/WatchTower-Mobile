@@ -89,12 +89,21 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
                     ),
                   ),
                 ),
-                ElevatedButton(
+                ElevatedButton.icon(
                   onPressed: () {
                     deleteImage(_selectedImageUrl);
                   },
-                  child: Text('Delete Image'),
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.deepOrange,
+                    size: 30,
+                  ),
+                  label: Text(
+                    'Delete Image',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                 ),
+                SizedBox(height: 30)
               ],
             )
           : SingleChildScrollView(

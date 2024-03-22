@@ -112,25 +112,16 @@ class ImagePickerScreenState extends State<ImagePickerScreen> {
                     ),
                     ElevatedButton.icon(
                       onPressed: () async {
+                        final ImagePicker _picker = ImagePicker();
+                        final XFile? img = await _picker.pickImage(
+                            source: ImageSource.gallery);
                         setState(() {
-                          _isLoading = true;
+                          image = img;
                         });
-                        var imageUrls = await fetchImageUrls(url);
-                        setState(() {
-                          _isLoading = false;
-                        });
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ImageDisplayScreen(
-                              imageUrls: imageUrls,
-                            ),
-                          ),
-                        );
                       },
-                      label: Text('Gallery'),
+                      label: const Text('Choose Image'),
                       icon: const Icon(
-                        Icons.photo_album_outlined,
+                        Icons.image,
                         size: 30,
                         color: (Colors.deepOrange),
                       ),
@@ -148,17 +139,32 @@ class ImagePickerScreenState extends State<ImagePickerScreen> {
                     ),
                     ElevatedButton.icon(
                       onPressed: () async {
-                        final ImagePicker _picker = ImagePicker();
-                        final XFile? img = await _picker.pickImage(
-                            source: ImageSource.gallery);
                         setState(() {
-                          image = img;
+                          _isLoading = true;
                         });
+                        var imageUrls = await fetchImageUrls(url);
+                        setState(() {
+                          _isLoading = false;
+                        });
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ImageDisplayScreen(
+                              imageUrls: imageUrls,
+                            ),
+                          ),
+                        );
                       },
-                      label: const Text('Choose Image'),
+                      label: Text(
+                        'Gallery',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       icon: const Icon(
-                        Icons.image,
-                        size: 30,
+                        Icons.photo_album_outlined,
+                        size: 40,
                         color: (Colors.deepOrange),
                       ),
                     ),
