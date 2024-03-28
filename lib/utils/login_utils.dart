@@ -152,8 +152,3 @@ class LoginUtils {
     themeMode.setBool('isLightModeSelected', !isLightModeSelected);
   }
 }
-
-
-
-
-

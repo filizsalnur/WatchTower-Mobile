@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
@@ -14,6 +13,7 @@ class ImageDisplayScreen extends StatefulWidget {
 }
 
 class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
+  String imageUrls = '';
   final int _currentIndex = 0;
   bool _isFullScreen = false;
   late String _selectedImageUrl;
@@ -23,6 +23,12 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
       _isFullScreen = true;
       _selectedImageUrl = imageUrl;
     });
+  }
+
+@override
+  void initState() {
+    super.initState();
+ 
   }
 
   void _closeFullScreenImage() {

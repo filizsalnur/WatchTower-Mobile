@@ -2,8 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/components/bottom_navigation.dart';
+import 'package:watch_tower_flutter/pages/all_Images.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
+import 'package:watch_tower_flutter/utils/login_utils.dart';
 import "./picture_take.dart";
+import './picture_take.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 const List<String> list = <String>[
   'select_an_alert_type',
@@ -49,6 +54,10 @@ class AlertDetails extends StatefulWidget {
 class AlertDetailsState extends State<AlertDetails> {
   final TextEditingController textFieldController1 = TextEditingController();
   final TextEditingController textFieldController = TextEditingController();
+  String baseUrl = '${LoginUtils().baseUrl}picture/upload';
+  bool _isLoading = false;
+
+  String url = '${LoginUtils().baseUrl}picture/allPictureUrls';
   String selectedType = '';
 
   String dropdownValue = list.first;
@@ -172,6 +181,48 @@ class AlertDetailsState extends State<AlertDetails> {
                     ),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              ElevatedButton.icon(
+                onPressed: _isLoading
+                    ? null
+                    : () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        var imageUrls =
+                            await ImagePickerScreenState().fetchImageUrls(url);
+                        setState(() {
+                          _isLoading = false;
+                        });
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ImageDisplayScreen(
+                              imageUrls: imageUrls,
+                            ),
+                          ),
+                        );
+                      },
+                label: const Text(
+                  'Gallery',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                icon: _isLoading
+                    ? SpinKitFoldingCube(
+                        color: Colors.deepOrange,
+                        size: 40.0,
+                      )
+                    : const Icon(
+                        Icons.photo_album_outlined,
+                        size: 60,
+                        color: Colors.deepOrange,
+                      ),
               ),
             ],
           ),

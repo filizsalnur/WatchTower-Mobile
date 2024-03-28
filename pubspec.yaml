@@ -65,6 +65,8 @@ dependencies:
   permission_handler: ^11.3.0
   flutter_image_compress: ^2.1.0
   cached_network_image: ^3.3.1
+  flutter_easyloading: ^3.0.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

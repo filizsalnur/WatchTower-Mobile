@@ -12,7 +12,7 @@ import 'package:watch_tower_flutter/pages/profile.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../utils/login_utils.dart';
 import "./all_Images.dart";
- 
+
 // Add this import for MediaType
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
@@ -43,6 +43,7 @@ class ImagePickerScreenState extends State<ImagePickerScreen> {
         final List<dynamic> data = jsonDecode(response.body);
         final List<String> imageUrls = data.cast<String>();
         print(imageUrls);
+        await Future.delayed(Duration(seconds: 1));
         return imageUrls;
       } else {
         throw Exception('Failed to load image URLs');
@@ -159,37 +160,37 @@ class ImagePickerScreenState extends State<ImagePickerScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        var imageUrls = await fetchImageUrls(url);
-                        setState(() {
-                          _isLoading = false;
-                        });
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ImageDisplayScreen(
-                              imageUrls: imageUrls,
-                            ),
-                          ),
-                        );
-                      },
-                      label: const Text(
-                        'Gallery',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      icon: const Icon(
-                        Icons.photo_album_outlined,
-                        size: 40,
-                        color: (Colors.deepOrange),
-                      ),
-                    ),
+                    // ElevatedButton.icon(
+                    //   onPressed: () async {
+                    //     setState(() {
+                    //       _isLoading = true;
+                    //     });
+                    //     var imageUrls = await fetchImageUrls(url);
+                    //     setState(() {
+                    //       _isLoading = false;
+                    //     });
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => ImageDisplayScreen(
+                    //           imageUrls: imageUrls,
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    //   label: const Text(
+                    //     'Gallery',
+                    //     style: TextStyle(
+                    //       fontSize: 20,
+                    //       fontWeight: FontWeight.bold,
+                    //     ),
+                    //   ),
+                    //   icon: const Icon(
+                    //     Icons.photo_album_outlined,
+                    //     size: 40,
+                    //     color: (Colors.deepOrange),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -233,19 +234,23 @@ class ImagePickerScreenState extends State<ImagePickerScreen> {
                         icon: const Icon(Icons.close),
                       ),
                       ElevatedButton.icon(
-                        onPressed: () async {
-                          if (image != null) {
-                            uploadImage(
-                                File(
-                                  image!.path,
-                                ),
-                                widget.alertBody,
-                                widget.alertType);
-                          } else {
-                            await AlertUtils()
-                                .errorAlert('Please Add a Picture', context);
-                          }
-                        },
+                        onPressed: _isLoading
+                            ? null
+                            : () async {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                if (image != null) {
+                                  await uploadImage(File(image!.path),
+                                      widget.alertBody, widget.alertType);
+                                } else {
+                                  await AlertUtils().errorAlert(
+                                      'Please Add a Picture', context);
+                                }
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              },
                         label: const Text('Upload Image'),
                         icon: const Icon(Icons.cloud_upload),
                       ),

@@ -476,14 +476,19 @@ class _HomePageState extends State<HomePage> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         if (prefs.containsKey('alertCount')) {
           int alertCount = int.parse(prefs.getString('alertCount')!);
+          print(alertCount);
           int newAlerts = res - alertCount;
+          print('number of new alerts : $newAlerts');
           if (newAlerts > 0) {
             ////// call the function to trigger the notification
             getAlertByIndex(alertCount + 1, context);
             int newAlertCount = alertCount + 1;
             prefs.setString('alertCount', newAlertCount.toString());
-          } else {
+          } else if (newAlerts == 0) {
             print('No new alerts');
+          } else if (newAlerts < 0) {
+            prefs.setString('alertCount', res.toString());
+            await getAlertCount(context);
           }
         } else {
           prefs.setString('alertCount', res.toString());
@@ -507,6 +512,9 @@ class _HomePageState extends State<HomePage> {
     int index,
     BuildContext context,
   ) async {
+    print(
+        'triggered notificationtriggered notificationtriggered notificationtriggered notificationtriggered notification');
+    print(index);
     try {
       final response = await http.post(
           Uri.parse('${LoginUtils().baseUrl}picture/showAlertByIndex'),
