@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watch_tower_flutter/components/bottom_navigation.dart';
 import 'package:watch_tower_flutter/pages/alert_details.dart';
 import 'package:watch_tower_flutter/pages/home.dart';
@@ -64,8 +65,16 @@ class ImagePickerScreenState extends State<ImagePickerScreen> {
 
       // Encode the compressed bytes to base64
       String base64Image = base64Encode(compressedBytes as List<int>);
-      String email = await ProfilePageState().getEmail();
+      String? email = await ProfilePageState().getEmail();
+      if (email == null || email.isEmpty) {
+        final prefs = await SharedPreferences.getInstance();
+        email = prefs.getString('emailForImageAlertScreen');
+      }
+      print(
+          'Email: =>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>');
       print(email);
+      print(
+          'Email: =>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>');
       final url = Uri.parse(baseUrl);
       final response = await http.post(
         url,

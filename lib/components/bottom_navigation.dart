@@ -24,11 +24,9 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   bool isTorchPressed = false;
   String authLevel = '';
   String message = '';
-  static String UrlForWebSocket = 'ws://192.168.0.11:3001';
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-  final channel = IOWebSocketChannel.connect(UrlForWebSocket);
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,35 +36,10 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
     _getAuthLevel();
     super.initState();
     // Listen to incoming WebSocket messages
-    channel.stream.listen((data) async {
-      if (data is String) {
-        if (!data.contains(await LoginUtils().getUserId())) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AlertScreen(data: data)));
-
-          setState(() {
-            message = data;
-          });
-        }
-      } else {
-        String decoded = String.fromCharCodes(data);
-        if (!decoded.contains(await LoginUtils().getUserId())) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AlertScreen(data: decoded)));
-
-          setState(() {
-            message = decoded;
-          });
-        }
-      }
-    });
   }
 
   @override
   void dispose() {
-    channel.sink.close();
     super.dispose();
   }
 

@@ -51,7 +51,7 @@ class DbServices {
         Map<String, dynamic> decodedJson = jsonDecode(response.body);
         String expectedItemNAME = decodedJson['expectedItemNAME'];
         await AlertUtils().errorAlert(
-            "Wrong Tag!            Please Scan: $expectedItemNAME", context);
+            "Wrong Tag!  Please Scan: $expectedItemNAME", context);
         return response.statusCode;
       } else if (response.statusCode == 302) {
         String jsonStringWithoutQuotes =

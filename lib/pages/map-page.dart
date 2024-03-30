@@ -56,7 +56,7 @@ class MapPageState extends State<MapPage> {
 
   Future getOrderArray() async {
     ApiResponse orderArray = await NfcService().getOrderArray();
-    if (orderArray.statusCode > 400 && orderArray.statusCode < 500) {
+    if (orderArray.statusCode >= 400 && orderArray.statusCode < 500) {
       AlertUtils().InfoAlert("Couldn't Find Any Record!", context);
       await Future.delayed(const Duration(seconds: 2));
       Navigator.pushAndRemoveUntil(
@@ -64,7 +64,7 @@ class MapPageState extends State<MapPage> {
         MaterialPageRoute(builder: (context) => const HomePage()),
         (route) => false,
       );
-    } else if (orderArray.statusCode >= 500 || orderArray.statusCode == -1) {
+    } else if (orderArray.statusCode == 500 || orderArray.statusCode == -1) {
       AlertUtils().errorAlert("Check Connection", context);
       await Future.delayed(const Duration(seconds: 2));
       Navigator.pushAndRemoveUntil(
@@ -112,7 +112,7 @@ class MapPageState extends State<MapPage> {
                 onMapCreated: _onMapCreated,
                 initialCameraPosition: CameraPosition(
                   target: _center,
-                  zoom: 11.0,
+                  zoom: 40.0,
                 ),
               ),
             if (isLoading)

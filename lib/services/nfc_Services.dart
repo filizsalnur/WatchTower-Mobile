@@ -88,9 +88,8 @@ class NfcService {
   }
 
   Future<ApiResponse> getOrderArray() async {
-  
-      try {
-          if (await HttpServices().verifyToken()) {
+    try {
+      if (await HttpServices().verifyToken()) {
         print(
             '====================================Order which the system expects==================================== ');
         final response = await http.get(
@@ -104,15 +103,14 @@ class NfcService {
         print('Response Body: $responseBody');
 
         return ApiResponse(statusCode, responseBody);
-         } else {
-      print('JWT is not valid');
-      return ApiResponse(-1, "Error: JWT is not valid");
-    }
-      } catch (e) {
-        print("Error in fetching ORDER : $e");
-        return ApiResponse(-1, "Error: $e");
+      } else {
+        print('JWT is not valid');
+        return ApiResponse(-1, "Error: JWT is not valid");
       }
-   
+    } catch (e) {
+      print("Error in fetching ORDER : $e");
+      return ApiResponse(-1, "Error: $e");
+    }
   }
 
   static ValueNotifier<dynamic> result = ValueNotifier(null);
@@ -136,7 +134,7 @@ class NfcService {
 
             payloadAsString = await UserInfoService()
                 .updateUserInfo(payloadAsString, sessionId);
-            payloadAsString = await NfcService().updateLocation(payloadAsString, sessionId);
+            // payloadAsString = await NfcService().updateLocation(payloadAsString, sessionId);
 
             if (payloadAsString.length > 2) {
               int statusCode =
@@ -268,11 +266,11 @@ class NfcService {
 
     return writeNfcData(newNfcTag);
   }
+
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<WritingResult> writeServiceForIOS(NfcData newNfcTag) async {
     if (await HttpServices().verifyToken()) {
       try {
-    
         bool tagFound = false;
         String json = jsonEncode(newNfcTag.toJson());
         await NfcManager.instance.startSession(
@@ -293,7 +291,7 @@ class NfcService {
           try {
             await ndef.write(message);
             result.value = 'Success to "Ndef Write"';
-            
+
             print('Success to ndef write');
           } on PlatformException catch (e) {
             result.value = 'PlatformException: $e';
@@ -309,19 +307,20 @@ class NfcService {
         }
         print('result.value: ${result.value}');
         print('nfcData: ${newNfcTag.toJson()}');
-        return WritingResult(newNfcTag,true);
+        return WritingResult(newNfcTag, true);
       } catch (e) {
         result.value = 'An error occurred while starting the NFC session: $e';
-       return WritingResult(NfcData(card_id: "", name: "", loc: Location(lat: "", long: "")),false);
+        return WritingResult(
+            NfcData(card_id: "", name: "", loc: Location(lat: "", long: "")),
+            false);
       }
     } else {
       print('JWT is not valid');
-      return WritingResult(NfcData(card_id: "", name: "", loc: Location(lat: "", long: "")),false);
+      return WritingResult(
+          NfcData(card_id: "", name: "", loc: Location(lat: "", long: "")),
+          false);
     }
   }
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<NfcData> createNfcData(String name) async {
@@ -345,39 +344,37 @@ class NfcService {
       return nfcData;
     }
   }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-   Future<String>  updateLocation(String jsonString,String sessionId) async {
+  Future<String> updateLocation(String jsonString, String sessionId) async {
     try {
       Map<String, dynamic> jsonData = jsonDecode(jsonString);
 
       print("##################################################");
       List<String> location = await DeviceService().getLocation();
-    print('======================LOCATION======================');
-    print(location);
-    if (location[0] == 'err') {
-      AlertUtils()
-          .getCustomToast("Please enable your location services.", Colors.red);
-      throw Exception('Error getting location');
-    } else {
-       Location loc = Location(lat: location[0], long: location[1]);
       print('======================LOCATION======================');
-      print(location[0]);
-      print(location[1]);
-  
-      jsonData['loc'] = loc.toJson();
-          print('after adding location:');
-      print(jsonData);
+      print(location);
+      if (location[0] == 'err') {
+        AlertUtils().getCustomToast(
+            "Please enable your location services.", Colors.red);
+        throw Exception('Error getting location');
+      } else {
+        Location loc = Location(lat: location[0], long: location[1]);
+        print('======================LOCATION======================');
+        print(location[0]);
+        print(location[1]);
 
-      String updatedJsonString = jsonEncode(jsonData);
+        jsonData['loc'] = loc.toJson();
+        print('after adding location:');
+        print(jsonData);
 
-      return updatedJsonString;
-    }
-   
-  
+        String updatedJsonString = jsonEncode(jsonData);
+
+        return updatedJsonString;
+      }
     } catch (e) {
       print(e);
       return 'error';
     }
-    
   }
 }

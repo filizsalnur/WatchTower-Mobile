@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watch_tower_flutter/pages/admin_home.dart';
 import 'package:watch_tower_flutter/pages/home.dart';
 import './signUp.dart';
@@ -53,6 +54,16 @@ class LoginPageState extends State<LoginPage> {
     } else {
       return false;
     }
+  }
+
+  Future<void> saveEmailForImageAlertScreen(String email) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(
+        "=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>");
+    print('SETTING EMAIL TO: $email');
+    print(
+        "=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>");
+    prefs.setString('emailForImageAlertScreen', email);
   }
 
   Future<void> loadSavedCredentials() async {
@@ -209,7 +220,8 @@ class LoginPageState extends State<LoginPage> {
                 children: [
                   TextButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Theme.of(context).colorScheme.secondary, textStyle: TextStyle(
+                      foregroundColor: Theme.of(context).colorScheme.secondary,
+                      textStyle: TextStyle(
                         fontSize: 17,
                         color: Theme.of(context).colorScheme.secondary,
                       ),
@@ -264,19 +276,22 @@ class LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
-
-                    backgroundColor: MaterialStateProperty.all( Theme.of(context).colorScheme.primary,),
-                  ),
-                  child: Padding(
-                    padding:  EdgeInsets.all(8.0),
-                    child:  Text(
-                      'LOGIN',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color:  Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold,)
+                    backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary,
                     ),
                   ),
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('LOGIN',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).colorScheme.background,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
                   onPressed: () async {
+                    await saveEmailForImageAlertScreen(mailController.text);
+
                     String mail = mailController.text;
                     String password = passwordController.text;
 
