@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:watch_tower_flutter/main.dart';
+import 'package:watch_tower_flutter/pages/profile.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
 import 'package:watch_tower_flutter/services/session_services.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
@@ -54,15 +55,6 @@ class _HomePageState extends State<HomePage> {
     _checkSessionStatus();
     _loadSavedCredentials();
     super.initState();
-    print(
-        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
-    print(
-        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
-    getAlertCount(context);
-    print(
-        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
-    print(
-        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
   }
 
   Future _checkSessionStatus() async {
@@ -252,18 +244,6 @@ class _HomePageState extends State<HomePage> {
                     shadowColor: Colors.blueGrey,
                     child: InkWell(
                       splashColor: Colors.grey.withAlpha(90),
-                      // onTap: () {
-                      //   if (isSessionActive) {
-                      //     AlertUtils()
-                      //         .confirmationAlert('New Session', context);
-                      //   } else {
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => NfcHomePage()),
-                      //     );
-                      //   }
-                      // },
                       child: SizedBox(
                         height: 200,
                         width: MediaQuery.of(context).size.width - 48,
@@ -457,7 +437,6 @@ class _HomePageState extends State<HomePage> {
 ////////////////////////////////////////////////////////////////////////////////
 
   Future<void> getAlertCount(BuildContext context) async {
-   
     try {
       final response = await http.get(
         Uri.parse('${LoginUtils().baseUrl}picture/alertNumber'),
@@ -507,9 +486,6 @@ class _HomePageState extends State<HomePage> {
     int index,
     BuildContext context,
   ) async {
-    print(
-        'triggered notificationtriggered notificationtriggered notificationtriggered notificationtriggered notification');
-    print(index);
     try {
       final response = await http.post(
           Uri.parse('${LoginUtils().baseUrl}picture/showAlertByIndex'),
@@ -524,34 +500,40 @@ class _HomePageState extends State<HomePage> {
       final alertType = decodedResponse['alertType'];
       final alertBody = decodedResponse['alertBody'];
       final alertDate = decodedResponse['createdAt'];
-      scaffoldMessengerKey.currentState!.showSnackBar(
-        SnackBar(
-          content: Text('New Alert Received'),
-          duration: const Duration(seconds: 5),
-          action: SnackBarAction(
-            label: 'View Alert',
-            textColor: Colors.white,
-            backgroundColor: Colors.purple,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ViewAlertPage(
-                            imageUrl: imageUrl,
-                            imageId: imageId,
-                            email: email,
-                            alertType: alertType,
-                            alertBody: alertBody,
-                            alertDate: alertDate,
-                          )));
-            },
-          ),
-        ),
-      );
 
-      print("========================================");
+      String thisUsersEmail = await ProfilePageState().getEmail();
+      if (email == thisUsersEmail) {
+        return;
+      } else if (email != thisUsersEmail) {
+        scaffoldMessengerKey.currentState!.showSnackBar(
+          SnackBar(
+            content: Text('New Alert Received'),
+            duration: const Duration(seconds: 5),
+            action: SnackBarAction(
+              label: 'View Alert',
+              textColor: Colors.white,
+              backgroundColor: Colors.purple,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ViewAlertPage(
+                              imageUrl: imageUrl,
+                              imageId: imageId,
+                              email: email,
+                              alertType: alertType,
+                              alertBody: alertBody,
+                              alertDate: alertDate,
+                            )));
+              },
+            ),
+          ),
+        );
+      }
+
+      print("===================RECEIVED ALERT=====================");
       print(response.body);
-      print("========================================");
+      print("===================RECEIVED ALERT=====================");
     } catch (e) {
       print("Error in db_services: $e");
     }
