@@ -25,10 +25,9 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
     });
   }
 
-@override
+  @override
   void initState() {
     super.initState();
- 
   }
 
   void _closeFullScreenImage() {
@@ -38,8 +37,8 @@ class _ImageDisplayScreenState extends State<ImageDisplayScreen> {
     });
   }
 
-  String url = '${LoginUtils().baseUrl}picture/deleteImage';
   void deleteImage(String id) async {
+    String url = '${await LoginUtils().getBaseUrl()}picture/deleteImage';
     try {
       id = id.split('/').last;
       print("id  =>>>>>>>>>>>>$id");

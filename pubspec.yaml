@@ -87,6 +87,7 @@ dev_dependencies:
 flutter:
   # Asset eklemek için assets anahtarını kullanabilirsiniz.
   assets:
+    - .env
     - assets/images/login.png
     - assets/images/profile_1.png
     - assets/images/nfc_reader.png

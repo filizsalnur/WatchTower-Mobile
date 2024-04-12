@@ -52,10 +52,10 @@ class AlertDetails extends StatefulWidget {
 class AlertDetailsState extends State<AlertDetails> {
   final TextEditingController textFieldController1 = TextEditingController();
   final TextEditingController textFieldController = TextEditingController();
-  String baseUrl = '${LoginUtils().baseUrl}picture/upload';
+  //String baseUrl = '${LoginUtils().baseUrl}picture/upload';
   bool _isLoading = false;
 
-  String url = '${LoginUtils().baseUrl}picture/allPictureUrls';
+  //String url = '${await LoginUtils().getBaseUrl()}picture/allPictureUrls';
   String selectedType = '';
 
   String dropdownValue = list.first;
@@ -191,7 +191,7 @@ class AlertDetailsState extends State<AlertDetails> {
                           _isLoading = true;
                         });
                         var imageUrls =
-                            await ImagePickerScreenState().fetchImageUrls(url);
+                            await ImagePickerScreenState().fetchImageUrls('${await LoginUtils().getBaseUrl()}picture/allPictureUrls');
                         setState(() {
                           _isLoading = false;
                         });

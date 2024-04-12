@@ -2,7 +2,9 @@ import 'package:web_socket_channel/io.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import 'package:http/http.dart' as http;
 
-String BaseUrl = LoginUtils().baseUrl;
+
+
+
 
 class WebSocketService {
   static IOWebSocketChannel? _channel;
@@ -17,7 +19,7 @@ class WebSocketService {
       print('what is being broadcasted from FireBase: ');
 
       final response = await http.get(
-        Uri.parse('${BaseUrl}sendHelloMessage'),
+        Uri.parse('${await LoginUtils().getBaseUrl()}sendHelloMessage'),
       );
 
       if (response.statusCode >= 399) {

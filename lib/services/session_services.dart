@@ -43,7 +43,7 @@ class SessionService {
     if (await HttpServices().verifyToken()) {
       String userId = await LoginUtils().getUserId();
 
-      final url = '${LoginUtils().baseUrl}session/check';
+      final url = '${await LoginUtils().getBaseUrl()}session/check';
 
       print('======================Check Session======================');
       try {
@@ -74,7 +74,7 @@ class SessionService {
     if (await HttpServices().verifyToken()) {
       String userId = await LoginUtils().getUserId();
 
-      final url = '${LoginUtils().baseUrl}session/end';
+      final url = '${await LoginUtils().getBaseUrl()}session/end';
 
       print('======================Check Session======================');
       try {
@@ -104,7 +104,7 @@ class SessionService {
     if (await HttpServices().verifyToken()) {
       String userId = await LoginUtils().getUserId();
 
-      final url = '${LoginUtils().baseUrl}session/create';
+      final url = '${await LoginUtils().getBaseUrl()}session/create';
 
       print('======================Check Session======================');
       try {
@@ -206,7 +206,7 @@ class SessionService {
   Future<int> updateSessionOrder(String sessionId) async {
     if (await HttpServices().verifyToken()) {
       final url =
-          '${LoginUtils().baseUrl}session/updateExistingSessionCardOrder';
+          '${await LoginUtils().getBaseUrl()}session/updateExistingSessionCardOrder';
 
       print('======================UPDATE SESSION======================');
       try {

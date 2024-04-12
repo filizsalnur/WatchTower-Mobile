@@ -5,14 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class logoutServices {
-  String baseUrl = LoginUtils().baseUrl;
+
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwt = prefs.getString('jwt');
     LoginUtils().printAllSharedPreferences();
     if (jwt != null) {
       final response = await http.post(
-        Uri.parse('${baseUrl}logout'),
+        Uri.parse('${await LoginUtils().getBaseUrl()}logout'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode({'jwt': jwt}),
       );
@@ -44,7 +44,7 @@ class logoutServices {
     LoginUtils().printAllSharedPreferences();
     if (jwt != null) {
       final response = await http.post(
-        Uri.parse('${baseUrl}logout'),
+        Uri.parse('${await LoginUtils().getBaseUrl()}logout'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode({'jwt': jwt}),
       );

@@ -52,7 +52,6 @@ class ViewAlertPageState extends State<ViewAlertPage> {
     return "${dateTime.hour}:${dateTime.minute}:${dateTime.second}";
   }
 
-  String url = '${LoginUtils().baseUrl}picture/deleteImage';
 
   @override
   Widget build(BuildContext context) {

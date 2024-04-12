@@ -9,8 +9,7 @@ class DeviceService {
 
 
 
-  String BaseUrl = LoginUtils().baseUrl;
-
+ 
   static const platform = MethodChannel('battery');
 
   static Future<int?> getBatteryLevel() async {

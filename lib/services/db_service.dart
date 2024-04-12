@@ -36,13 +36,13 @@ class Tag {
 
 class DbServices {
   int keyvalue = 0;
-  String BaseUrl = LoginUtils().baseUrl;
+
   Future<int> saveToDatabase(BuildContext context, String inputString) async {
     try {
       final jsonObject = jsonDecode(inputString);
       print('what is being sent to server: $jsonObject');
       final response = await http.post(
-        Uri.parse('${BaseUrl}logs'),
+        Uri.parse('${await LoginUtils().getBaseUrl()}logs'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
@@ -93,7 +93,7 @@ class DbServices {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<int> updateArray(List<Map<String, dynamic>> array) async {
-    final url = '${BaseUrl}tagOrder/new';
+    final url = '${await LoginUtils().getBaseUrl()}tagOrder/new';
     print("//////////////////////////////////////////////");
     print('trying to set read order : $array');
 
@@ -123,7 +123,7 @@ class DbServices {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<dbResponse> getAllUsers() async {
-    final url = '${BaseUrl}get_all_users';
+    final url = '${await LoginUtils().getBaseUrl()}get_all_users';
     print("======================getAllUsers======================");
     try {
       final response = await http.get(
@@ -144,7 +144,7 @@ class DbServices {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<int> changeAuthLevel(String item) async {
-    final url = '${BaseUrl}change_auth_level';
+    final url = '${await LoginUtils().getBaseUrl()}change_auth_level';
     print('======================changeAuthLevel======================');
     try {
       print("item: $item");
@@ -182,7 +182,7 @@ class DbServices {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<ApiResponse> getUserHistory(String userId) async {
-    final url = '${BaseUrl}logs/user_history';
+    final url = '${await LoginUtils().getBaseUrl()}logs/user_history';
     print('======================getUserHistory======================');
     try {
       final response = await http.post(

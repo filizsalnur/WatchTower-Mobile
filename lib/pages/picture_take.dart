@@ -12,6 +12,7 @@ import 'package:watch_tower_flutter/pages/home.dart';
 import 'package:watch_tower_flutter/pages/profile.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../utils/login_utils.dart';
+ 
 
 // Add this import for MediaType
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -31,8 +32,8 @@ class ImagePickerScreen extends StatefulWidget {
 
 class ImagePickerScreenState extends State<ImagePickerScreen> {
   XFile? image;
-  String baseUrl = '${LoginUtils().baseUrl}picture/upload';
-  String url = '${LoginUtils().baseUrl}picture/allPictureUrls';
+  // String baseUrl = '${LoginUtils().baseUrl}picture/upload';
+  // String url = '${LoginUtils().baseUrl}picture/allPictureUrls';
   bool _isLoading = false;
 
   Future<List<String>> fetchImageUrls(String url) async {
@@ -74,7 +75,7 @@ class ImagePickerScreenState extends State<ImagePickerScreen> {
       print(email);
       print(
           'Email: =>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>');
-      final url = Uri.parse(baseUrl);
+      final url = Uri.parse('${await LoginUtils().getBaseUrl()}picture/upload');
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},

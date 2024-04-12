@@ -14,7 +14,7 @@ class ApiResponse {
 }
 
 class HttpServices {
-  String BaseUrl = LoginUtils().baseUrl;
+
 
   Future<ApiResponse> loginPost(String email, String password) async {
     try {
@@ -26,7 +26,7 @@ class HttpServices {
       print('what is being sent to the server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse('${BaseUrl}login'),
+        Uri.parse('${await LoginUtils().getBaseUrl()}login'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
@@ -81,7 +81,7 @@ class HttpServices {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwt = prefs.getString('jwt') ?? '';
     final response = await http.post(
-      Uri.parse('${BaseUrl}jwt-verify'),
+      Uri.parse('${await LoginUtils().getBaseUrl()}jwt-verify'),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode({"jwt": jwt}),
     );
@@ -108,7 +108,7 @@ class HttpServices {
       print('what is being sent to server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse('${BaseUrl}signup'),
+        Uri.parse('${await LoginUtils().getBaseUrl()}signup'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
@@ -138,7 +138,7 @@ class HttpServices {
         print('what is being sent to Password Update: $jsonObject');
 
         final response = await http.post(
-          Uri.parse('${BaseUrl}password/update'),
+          Uri.parse('${await LoginUtils().getBaseUrl()}password/update'),
           headers: {'Content-Type': 'application/json; charset=UTF-8'},
           body: jsonEncode(jsonObject),
         );

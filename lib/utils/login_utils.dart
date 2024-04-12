@@ -1,10 +1,11 @@
 // ignore_for_file: override_on_non_overriding_member
 
 import 'dart:convert';
-
+import 'dart:io';
 import '../services/login_Services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LoginError {
   bool isLoginDone = false;
@@ -37,7 +38,12 @@ class LoginUtils {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  String baseUrl = 'http://192.168.0.11:3001/';
+
+  Future<String> getBaseUrl() async {
+    await dotenv.load(fileName: '.env');
+    String baseUrl = dotenv.env['BASE_URL'] ?? 'DEFAULT_VALUE';
+    return baseUrl;
+  }
 
   Future<void> setBaseUrl(String newBaseUrl) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

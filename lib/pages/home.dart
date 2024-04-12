@@ -58,48 +58,66 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future _checkSessionStatus() async {
-    ApiResponse sessionStatusResponse =
-        await SessionService().checkSessionStatus();
-    if (sessionStatusResponse.statusCode < 400) {
-      setState(() {
-        isSessionActive = true;
-      });
-    } else if (sessionStatusResponse.statusCode > 400) {
-      setState(() {
-        isSessionActive = false;
-      });
+    try {
+      ApiResponse sessionStatusResponse =
+          await SessionService().checkSessionStatus();
+      if (sessionStatusResponse.statusCode < 400) {
+        setState(() {
+          isSessionActive = true;
+        });
+      } else if (sessionStatusResponse.statusCode > 400) {
+        setState(() {
+          isSessionActive = false;
+        });
+      }
+    } catch (e) {
+      print('Error in home.dart:_checkSessionStatus $e');
     }
   }
 
   String createDate(int index) {
-    DateTime now = DateTime.now().add(Duration(days: index));
-    String formattedDate = DateFormat('dd').format(now);
-    return formattedDate;
+    try {
+      DateTime now = DateTime.now().add(Duration(days: index));
+      String formattedDate = DateFormat('dd').format(now);
+      return formattedDate;
+    } catch (e) {
+      print('Error in home.dart:createDate $e');
+      throw Exception(e);
+    }
   }
 
   int createMonth(int index) {
-    DateTime now = DateTime.now().add(Duration(days: index));
-    String formatted = DateFormat('MM').format(now);
-    int formattedMonth = int.parse(formatted);
-    return formattedMonth - 1;
+    try {
+      DateTime now = DateTime.now().add(Duration(days: index));
+      String formatted = DateFormat('MM').format(now);
+      int formattedMonth = int.parse(formatted);
+      return formattedMonth - 1;
+    } catch (e) {
+      print('Error in home.dart:createMonth $e');
+      throw Exception(e);
+    }
   }
 
   void _loadSavedCredentials() async {
-    final credentials = await LoginUtils().loadSavedCredentials();
-    String email = credentials.email;
+    try {
+      final credentials = await LoginUtils().loadSavedCredentials();
+      String email = credentials.email;
 
-    int atIndex = email.indexOf("@");
+      int atIndex = email.indexOf("@");
 
-    String updatedEmail = email.substring(0, atIndex);
-    updatedEmail = updatedEmail.replaceAll(".", " ");
-    updatedEmail = updatedEmail.replaceFirst(
-        updatedEmail[0], updatedEmail[0].toUpperCase());
-    updatedEmail = updatedEmail.replaceFirst(
-        updatedEmail[updatedEmail.indexOf(' ') + 1],
-        updatedEmail[updatedEmail.indexOf(' ') + 1].toUpperCase());
-    setState(() {
-      userName = updatedEmail;
-    });
+      String updatedEmail = email.substring(0, atIndex);
+      updatedEmail = updatedEmail.replaceAll(".", " ");
+      updatedEmail = updatedEmail.replaceFirst(
+          updatedEmail[0], updatedEmail[0].toUpperCase());
+      updatedEmail = updatedEmail.replaceFirst(
+          updatedEmail[updatedEmail.indexOf(' ') + 1],
+          updatedEmail[updatedEmail.indexOf(' ') + 1].toUpperCase());
+      setState(() {
+        userName = updatedEmail;
+      });
+    } catch (e) {
+      print('Error in home.dart:_loadSavedCredentials $e');
+    }
   }
 
   @override
@@ -439,7 +457,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> getAlertCount(BuildContext context) async {
     try {
       final response = await http.get(
-        Uri.parse('${LoginUtils().baseUrl}picture/alertNumber'),
+        Uri.parse('${await LoginUtils().getBaseUrl()}picture/alertNumber'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
       );
       if (response.statusCode < 399) {
@@ -473,13 +491,6 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       print("Error in db_services: $e");
     }
-
-    print(
-        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
-    print(
-        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
-    print(
-        '---====---===---====---===---====---===---====---===---====---===---====---===---====---===');
   }
 
   Future<void> getAlertByIndex(
@@ -488,7 +499,8 @@ class _HomePageState extends State<HomePage> {
   ) async {
     try {
       final response = await http.post(
-          Uri.parse('${LoginUtils().baseUrl}picture/showAlertByIndex'),
+          Uri.parse(
+              '${await LoginUtils().getBaseUrl()}picture/showAlertByIndex'),
           body: {
             'index': index.toString(),
           });
@@ -503,6 +515,7 @@ class _HomePageState extends State<HomePage> {
 
       String thisUsersEmail = await ProfilePageState().getEmail();
       if (email == thisUsersEmail) {
+        print('=>=>=>=>=>=>ALERT WAS RECEIVED BUT NOT SHOWN<=<=<=<=<=<=');
         return;
       } else if (email != thisUsersEmail) {
         scaffoldMessengerKey.currentState!.showSnackBar(
@@ -530,10 +543,6 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       }
-
-      print("===================RECEIVED ALERT=====================");
-      print(response.body);
-      print("===================RECEIVED ALERT=====================");
     } catch (e) {
       print("Error in db_services: $e");
     }

@@ -67,7 +67,7 @@ class Location {
 }
 
 class NfcService {
-  String BaseUrl = LoginUtils().baseUrl;
+
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -93,7 +93,7 @@ class NfcService {
         print(
             '====================================Order which the system expects==================================== ');
         final response = await http.get(
-          Uri.parse('${BaseUrl}tagOrder/get'),
+          Uri.parse('${await LoginUtils().getBaseUrl()}tagOrder/get'),
         );
 
         final statusCode = response.statusCode;
