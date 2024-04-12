@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/pages/map-page.dart';
 import 'package:watch_tower_flutter/services/device_services.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
-import 'package:web_socket_channel/io.dart';
 import '../pages/home.dart';
 import '../pages/profile.dart';
-import '../pages/alert_screen.dart';
 import '../pages/alert_details.dart';
 import '../pages/admin_home.dart';
 
@@ -24,23 +22,12 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   bool isTorchPressed = false;
   String authLevel = '';
   String message = '';
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
 
   @override
   void initState() {
     _getAuthLevel();
     super.initState();
     // Listen to incoming WebSocket messages
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   Future<void> _getAuthLevel() async {

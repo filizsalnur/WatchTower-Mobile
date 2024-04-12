@@ -12,7 +12,6 @@ import 'package:watch_tower_flutter/pages/home.dart';
 import 'package:watch_tower_flutter/pages/profile.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../utils/login_utils.dart';
-import "./all_Images.dart";
 
 // Add this import for MediaType
 import 'package:flutter_image_compress/flutter_image_compress.dart';

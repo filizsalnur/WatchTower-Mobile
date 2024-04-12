@@ -32,9 +32,9 @@ class NfcHomePageState extends State<NfcHomePage> {
   bool isOldSessionOn = false;
   bool isLightModeSelected = true;
   bool isLoading = false;
+  bool readLoading = false;
   @override
   void initState() {
-    print(widget.isOldSessionOn);
     LoginUtils().getThemeMode().then((value) {
       setState(() {
         isLightModeSelected = value;
@@ -210,50 +210,6 @@ class NfcHomePageState extends State<NfcHomePage> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    // Align(
-                    //   alignment: Alignment.bottomCenter,
-                    //   child: SizedBox(
-                    //     width: MediaQuery.of(context).size.width - 40,
-                    //     height: 50,
-                    //     child: ElevatedButton(
-                    //       onPressed: () async {
-                    //         int result = await SessionService()
-                    //             .endActiveSessionStatus();
-                    //                 print("nfc Home 2");
-                    //         if (result<400) {
-                    //           print('read order resetted');
-
-                    //           Navigator.pushReplacement(
-                    //             context,
-                    //             MaterialPageRoute(builder: (context) => HomePage()),
-                    //           );
-                    //           print('session stopped');
-                    //         } else {
-                    //           print('error while resetting read order');
-                    //           AlertUtils().errorAlert(
-                    //               "Unable to end current session", context);
-                    //         }
-                    //       },
-                    //       child: Padding(
-                    //         padding: const EdgeInsets.only(
-                    //             left: 20, right: 20, top: 10, bottom: 10),
-                    //         child: Text('End Session',
-                    //             style: TextStyle(
-                    //                 color: Colors.white,
-                    //                 fontSize: 20,
-                    //                 fontWeight: FontWeight.bold)),
-                    //       ),
-                    //       style: ButtonStyle(
-                    //         shape:
-                    //             MaterialStateProperty.all<RoundedRectangleBorder>(
-                    //           RoundedRectangleBorder(
-                    //             borderRadius: BorderRadius.circular(10.0),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

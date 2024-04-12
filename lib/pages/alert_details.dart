@@ -6,8 +6,6 @@ import 'package:watch_tower_flutter/pages/all_Images.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import "./picture_take.dart";
-import './picture_take.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 const List<String> list = <String>[

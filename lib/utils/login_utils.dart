@@ -71,8 +71,6 @@ class LoginUtils {
     return loginError;
   }
 
- 
-
   Future<Credentials> loadSavedCredentials() async {
     final prefs = await SharedPreferences.getInstance();
 
